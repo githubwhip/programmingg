@@ -4,11 +4,17 @@ import matplotlib.pyplot as plt
 import random
 from matplotlib import font_manager, rc
 from matplotlib.ticker import FuncFormatter
+import os
+import matplotlib.font_manager as font_manager
 
-# 한글 폰트 설정 (맑은 고딕)
-font_path = "C:/Windows/Fonts/malgun.ttf"  # Windows의 경우
+# 폰트 파일의 경로 설정
+font_path = os.path.join(os.path.dirname(__file__), 'fonts', 'malgun.ttf')
 font_name = font_manager.FontProperties(fname=font_path).get_name()
-rc('font', family=font_name)
+
+# matplotlib에 폰트 설정
+import matplotlib.pyplot as plt
+plt.rcParams['font.family'] = font_name
+
 
 # CSV 파일 불러오기 (인코딩 문제 해결을 위해 cp949 사용)
 file_path = '매출현황.csv'
