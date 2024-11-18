@@ -7,8 +7,8 @@ from matplotlib.ticker import FuncFormatter
 import os
 import matplotlib.font_manager as font_manager
 
-# 폰트 파일의 경로 설정
-font_path = os.path.join(os.path.dirname(__file__), 'fonts', 'malgun.ttf')
+# 현재 스크립트의 위치가 아닌, 프로젝트 루트를 기준으로 경로 설정
+font_path = os.path.join(os.getcwd(), 'fonts', 'malgun.ttf')
 font_name = font_manager.FontProperties(fname=font_path).get_name()
 
 # matplotlib에 폰트 설정
