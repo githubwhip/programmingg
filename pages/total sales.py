@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+pip install matplotlib
 import random
 from matplotlib import font_manager, rc
 from matplotlib.ticker import FuncFormatter
