@@ -5,18 +5,14 @@ import matplotlib.pyplot as plt
 import random
 from matplotlib import font_manager, rc
 from matplotlib.ticker import FuncFormatter
-import os
-import matplotlib.font_manager as font_manager
 
 # 현재 스크립트의 위치가 아닌, 프로젝트 루트를 기준으로 경로 설정
-font_path = "fonts/malgun.ttf"
-font_manager.fontManager.addfont(font_-path)
-rc('font', family='malgun')
+font_path = "fonts/malgun.ttf"  # malgun.ttf 경로
+font_manager.fontManager.addfont(font_path)  # 폰트 추가
+rc('font', family='Malgun Gothic')  # 폰트 이름 설정
 
 # matplotlib에 폰트 설정
-import matplotlib.pyplot as plt
-plt.rcParams['font.family'] = font_name
-
+plt.rcParams['font.family'] = 'Malgun Gothic'
 
 # CSV 파일 불러오기 (인코딩 문제 해결을 위해 cp949 사용)
 file_path = '매출현황.csv'
