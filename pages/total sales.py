@@ -6,6 +6,7 @@ from matplotlib import font_manager, rc
 from matplotlib.ticker import FuncFormatter
 import os
 import matplotlib.font_manager as font_manager
+import koreanize_matplotlib
 
 # 현재 스크립트의 위치가 아닌, 프로젝트 루트를 기준으로 경로 설정
 font_path = os.path.join(os.getcwd(), 'fonts', 'malgun.ttf')
