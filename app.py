@@ -4,7 +4,6 @@ import time
 
 
 
-st.title("2024-25986 정유미")
 st.image('image.png')
 data = pd.read_csv("members.csv")
 data["PW"] = data["PW"].astype(str)

@@ -1,18 +1,14 @@
 import streamlit as st
 import pandas as pd
-import koreanize_matplotlib
 import matplotlib.pyplot as plt
 import random
 from matplotlib import font_manager, rc
 from matplotlib.ticker import FuncFormatter
 
-# 현재 스크립트의 위치가 아닌, 프로젝트 루트를 기준으로 경로 설정
-font_path = "fonts/malgun.ttf"  # malgun.ttf 경로
-font_manager.fontManager.addfont(font_path)  # 폰트 추가
-rc('font', family='Malgun Gothic')  # 폰트 이름 설정
-
-# matplotlib에 폰트 설정
-plt.rcParams['font.family'] = 'Malgun Gothic'
+# 한글 폰트 설정 (맑은 고딕)
+font_path = "C:/Windows/Fonts/malgun.ttf"  # Windows의 경우
+font_name = font_manager.FontProperties(fname=font_path).get_name()
+rc('font', family=font_name)
 
 # CSV 파일 불러오기 (인코딩 문제 해결을 위해 cp949 사용)
 file_path = '매출현황.csv'
