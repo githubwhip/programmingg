@@ -50,3 +50,19 @@ for i, txt in enumerate(selected_num_data['등록 대수']):
 
 # 그래프 출력
 st.pyplot(fig)
+
+# 등록 비중 막대 그래프 생성 (가로 방향)
+fig2, ax2 = plt.subplots(figsize=(10, 6))
+colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
+ax2.barh(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
+ax2.set_title(f"{selected_vehicle} 연도별 등록 비중")
+ax2.set_xlabel("등록 비중 (%)")
+ax2.set_ylabel("연도")
+
+# 퍼센트 레이블 추가
+for i, v in enumerate(selected_per_data['등록 비중']):
+    ax2.text(v, i, f'{v:.1f}%', va='center', ha='left')
+
+# 그래프 출력
+st.pyplot(fig1)
+st.pyplot(fig2)
