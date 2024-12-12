@@ -27,9 +27,8 @@ enroll_per = preprocess_data(load_data("enrollper.csv"), "등록 비중")
 # 각 차종별 최대값과 최소값 계산하여 y축 스케일 결정
 def calculate_y_axis_scale(df):
     scales = {}
-    for _, row in df.iterrows():
-        vehicle = row['구분']
-        vehicle_data = row.iloc[1:]  # 연도별 데이터만 선택
+    for vehicle in df['구분'].unique():
+        vehicle_data = df[df['구분'] == vehicle]['등록 대수']
         min_value = vehicle_data.min()
         max_value = vehicle_data.max()
         range_value = max_value - min_value
@@ -62,29 +61,8 @@ fig1, ax1 = plt.subplots(figsize=(10, 6))
 ax1.plot(selected_num_data['연도'], selected_num_data['등록 대수'], marker='o')
 ax1.set_title(f"{selected_vehicle} 연도별 등록 대수")
 ax1.set_xlabel("연도")
-ax1.set_ylabel("등록 대수")
+ax1.set_ylabel("등록 대수")  # '백만 단위' 제거
 
 # 세로축을 적절한 단위로 설정 (지수 표기 제거)
 vehicle_scale_info = scales[selected_vehicle]
-ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{int(x / vehicle_scale_info["scale"])}만'))
-ax1.set_ylim(vehicle_scale_info['min'], vehicle_scale_info['max'])
-
-# 숫자 레이블 추가
-for i, txt in enumerate(selected_num_data['등록 대수']):
-    ax1.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0,10), ha='center')
-
-# 등록 비중 막대 그래프 생성 (가로 방향)
-fig2, ax2 = plt.subplots(figsize=(10, 6))
-colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
-ax2.barh(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
-ax2.set_title(f"{selected_vehicle} 연도별 등록 비중")
-ax2.set_xlabel("등록 비중 (%)")
-ax2.set_ylabel("연도")
-
-# 퍼센트 레이블 추가
-for i, v in enumerate(selected_per_data['등록 비중']):
-    ax2.text(v, i, f'{v:.1f}%', va='center', ha='left')
-
-# 그래프 출력
-st.pyplot(fig1)
-st.pyplot(fig2)
+ax1.yaxis.set_major_formatter(FuncFormatter(lambda x
