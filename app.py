@@ -66,7 +66,7 @@ ax1.set_ylabel("등록 대수")
 
 # 세로축을 적절한 단위로 설정 (지수 표기 제거)
 vehicle_scale_info = scales[selected_vehicle]
-ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{int(x / vehicle_scale_info["scale"])}M'))
+ax1.yaxis.set_major_formatter(FuncFormatter(lambda x, _: f'{int(x / vehicle_scale_info["scale"])}만'))
 ax1.set_ylim(vehicle_scale_info['min'], vehicle_scale_info['max'])
 
 # 숫자 레이블 추가
