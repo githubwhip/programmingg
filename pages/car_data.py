@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MultipleLocator
+from matplotlib.ticker import MultipleLocator, FuncFormatter
 import random
 
 # 데이터 로드 및 전처리 함수
@@ -44,13 +44,21 @@ ax1.set_xlabel("연도")
 ax1.set_ylabel("등록 대수")
 ax1.yaxis.set_major_locator(MultipleLocator(1000000))  # 백만 단위 눈금 설정
 
-# 등록 비중 막대 그래프 생성
+# 숫자 레이블 추가
+for i, txt in enumerate(selected_num_data['등록 대수']):
+    ax1.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0,10), ha='center')
+
+# 등록 비중 막대 그래프 생성 (가로 방향)
 fig2, ax2 = plt.subplots(figsize=(10, 6))
 colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
-ax2.bar(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
+ax2.barh(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
 ax2.set_title(f"{selected_vehicle} 연도별 등록 비중")
-ax2.set_xlabel("연도")
-ax2.set_ylabel("등록 비중 (%)")
+ax2.set_xlabel("등록 비중 (%)")
+ax2.set_ylabel("연도")
+
+# 퍼센트 레이블 추가
+for i, v in enumerate(selected_per_data['등록 비중']):
+    ax2.text(v, i, f'{v:.1f}%', va='center', ha='left')
 
 # 그래프 출력
 st.pyplot(fig1)
