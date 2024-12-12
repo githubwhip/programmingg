@@ -18,30 +18,17 @@ def load_data(file_name):
     df.columns = df.columns.str.strip()  # 열 이름 공백 제거
     return df
 
-def preprocess_enroll_data(df):
+def preprocess_data(df, value_name):
     df = df.iloc[1:]  # 첫 행 제거 (필요 없는 정보)
     df.reset_index(drop=True, inplace=True)
     df.columns = ["구분"] + list(df.columns[1:])  # '구분' 열을 유지
-    df = df.melt(id_vars=["구분"], var_name="연도", value_name="값")  # 데이터를 긴 형식으로 변환
+    df = df.melt(id_vars=["구분"], var_name="연도", value_name=value_name)  # 데이터를 긴 형식으로 변환
     return df
 
-def preprocess_sales_data(df):
-    df = df.iloc[1:]  # 첫 행 제거 (필요 없는 정보)
-    df.reset_index(drop=True, inplace=True)
-    df.columns = ["구분"] + list(df.columns[1:])  # '구분' 열을 유지
-    df = df.melt(id_vars=["구분"], var_name="연도", value_name="값")  # 데이터를 긴 형식으로 변환
-    return df
-
-enroll_num = preprocess_enroll_data(load_data("enrollnum.csv"))
-enroll_per = preprocess_enroll_data(load_data("enrollper.csv"))
-sales_num = preprocess_sales_data(load_data("salesnum.csv"))
-sales_per = preprocess_sales_data(load_data("salesper.csv"))
-
-# 데이터 확인 (디버깅용)
-st.write("등록 대수 데이터 샘플:", enroll_num.head())
-st.write("등록 비중 데이터 샘플:", enroll_per.head())
-st.write("판매 대수 데이터 샘플:", sales_num.head())
-st.write("판매 비중 데이터 샘플:", sales_per.head())
+enroll_num = preprocess_data(load_data("enrollnum.csv"), "등록 대수")
+enroll_per = preprocess_data(load_data("enrollper.csv"), "등록 비중")
+sales_num = preprocess_data(load_data("salesnum.csv"), "판매 대수")
+sales_per = preprocess_data(load_data("salesper.csv"), "판매 비중")
 
 # Streamlit 애플리케이션
 st.title("전기차 데이터 분석")
@@ -52,7 +39,7 @@ if option == "등록현황":
     fig1, ax1 = plt.subplots(figsize=(10, 6))
     for fuel in enroll_num['구분'].unique():
         fuel_data = enroll_num[enroll_num['구분'] == fuel]
-        ax1.plot(fuel_data['연도'], fuel_data['값'], label=fuel)
+        ax1.plot(fuel_data['연도'], fuel_data['등록 대수'], label=fuel)
     ax1.set_title("연료별 연도별 등록 대수")
     ax1.set_xlabel("연도")
     ax1.set_ylabel("등록 대수")
@@ -61,11 +48,12 @@ if option == "등록현황":
 
     # 등록 비중 원 그래프
     fig2, ax2 = plt.subplots()
-    latest_data = enroll_per[enroll_per['연도'] == enroll_per['연도'].max()]
-    ax2.pie(latest_data['값'].astype(float), 
+    latest_year = enroll_per['연도'].max()
+    latest_data = enroll_per[enroll_per['연도'] == latest_year]
+    ax2.pie(latest_data['등록 비중'].astype(float), 
             labels=latest_data['구분'], 
             autopct='%1.1f%%')
-    ax2.set_title("연료별 등록 비중")
+    ax2.set_title(f"{latest_year} 연료별 등록 비중")
 
     st.pyplot(fig1)
     st.pyplot(fig2)
@@ -75,7 +63,7 @@ elif option == "판매현황":
     fig3, ax3 = plt.subplots(figsize=(10, 6))
     for fuel in sales_num['구분'].unique():
         fuel_data = sales_num[sales_num['구분'] == fuel]
-        ax3.plot(fuel_data['연도'], fuel_data['값'], label=fuel)
+        ax3.plot(fuel_data['연도'], fuel_data['판매 대수'], label=fuel)
     ax3.set_title("연료별 연도별 판매 대수")
     ax3.set_xlabel("연도")
     ax3.set_ylabel("판매 대수")
@@ -84,11 +72,12 @@ elif option == "판매현황":
 
     # 판매 비중 원 그래프
     fig4, ax4 = plt.subplots()
-    latest_data = sales_per[sales_per['연도'] == sales_per['연도'].max()]
-    ax4.pie(latest_data['값'].astype(float), 
+    latest_year = sales_per['연도'].max()
+    latest_data = sales_per[sales_per['연도'] == latest_year]
+    ax4.pie(latest_data['판매 비중'].astype(float), 
             labels=latest_data['구분'], 
             autopct='%1.1f%%')
-    ax4.set_title("연료별 판매 비중")
+    ax4.set_title(f"{latest_year} 연료별 판매 비중")
 
     st.pyplot(fig3)
     st.pyplot(fig4)
@@ -106,5 +95,8 @@ if st.button("답변 저장"):
         "P1A2": [q2]
     }
     answer_df = pd.DataFrame(answer_data)
+    
+    # 파일에 헤더 없이 추가 모드로 저장
     answer_df.to_csv("page1_answer.csv", mode='a', index=False, header=False)
+    
     st.success("답변이 저장되었습니다.")
