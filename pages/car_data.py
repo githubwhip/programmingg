@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MultipleLocator, FuncFormatter
+from matplotlib.ticker import FuncFormatter
 import random
 
 # 데이터 로드 및 전처리 함수
@@ -12,7 +12,8 @@ def load_data(file_name):
     return df
 
 def preprocess_data(df, value_name):
-    df = df.iloc[1:].reset_index(drop=True)  # 첫 행 제거 후 인덱스 재설정
+    # '합계'와 '기타' 제외
+    df = df[~df['구분'].isin(['합계', '기타'])].reset_index(drop=True)
     df = df.iloc[:, 3:]  # '구분' 열부터 시작하도록 조정
     df = df.melt(id_vars=["구분"], var_name="연도", value_name=value_name)
     if "대수" in value_name:
@@ -36,13 +37,20 @@ selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
 selected_num_data = enroll_num[enroll_num['구분'] == selected_vehicle]
 selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 
-# 등록 대수 꺾은선 그래프 생성
+# 등록 대수 꺾은선 그래프 생성 (세로축 백만 단위 설정)
 fig1, ax1 = plt.subplots(figsize=(10, 6))
+
+# 그래프 그리기
 ax1.plot(selected_num_data['연도'], selected_num_data['등록 대수'], marker='o')
 ax1.set_title(f"{selected_vehicle} 연도별 등록 대수")
 ax1.set_xlabel("연도")
-ax1.set_ylabel("등록 대수")
-ax1.yaxis.set_major_locator(MultipleLocator(1000000))  # 백만 단위 눈금 설정
+ax1.set_ylabel("등록 대수 (백만 단위)")
+
+# 세로축을 백만 단위로 표시 (지수 표기 제거)
+def millions_formatter(x, _):
+    return f'{int(x / 1_000_000)}M'
+
+ax1.yaxis.set_major_formatter(FuncFormatter(millions_formatter))
 
 # 숫자 레이블 추가
 for i, txt in enumerate(selected_num_data['등록 대수']):
