@@ -19,12 +19,11 @@ def load_data(file_name):
     return df
 
 def preprocess_data(df, value_name):
-    # 불필요한 첫 두 행 제거 및 열 이름 정리
+    # 첫 두 행 제거 및 열 이름 정리
     df = df.iloc[1:].reset_index(drop=True)  # 첫 행 제거 후 인덱스 재설정
-    df.columns = ["구분"] + list(df.columns[1:])  # 첫 번째 열은 '구분', 나머지는 연도로 설정
     
-    # 불필요한 열 제거 (예: Unnamed 열)
-    df = df.loc[:, ~df.columns.str.contains("Unnamed")]
+    # 필요한 열만 선택 ('구분'과 연도별 데이터)
+    df = df.iloc[:, 3:]  # '구분' 열부터 시작하도록 조정
     
     # 데이터 변환 (긴 형식으로 변경)
     df = df.melt(id_vars=["구분"], var_name="연도", value_name=value_name)
