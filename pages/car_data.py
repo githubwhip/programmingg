@@ -2,6 +2,15 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import random
+import koreanize_matplotlib
+from matplotlib.ticker import MultipleLocator
+from matplotlib import font_manager, rc
+
+# 폰트 설정
+font_path = "fonts/malgun.ttf"
+font_manager.fontManager.addfont(font_path)
+rc('font', family='Malgun Gothic')
+plt.rcParams['font.family'] = 'Malgun Gothic'
 
 # 데이터 로드 및 전처리 함수
 @st.cache_data
