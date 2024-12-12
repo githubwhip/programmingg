@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import random
 
 # 데이터 로드 및 전처리 함수
 @st.cache_data
@@ -21,6 +22,7 @@ def preprocess_data(df, value_name):
 
 # 데이터 로드 및 전처리
 enroll_num = preprocess_data(load_data("enrollnum.csv"), "등록 대수")
+enroll_per = preprocess_data(load_data("enrollper.csv"), "등록 비중")  # 등록 비중 데이터 추가
 
 # Streamlit 애플리케이션 시작
 st.title("차종별 연도별 등록 현황")
@@ -31,25 +33,26 @@ selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
 
 # 선택된 차종에 대한 데이터 필터링
 selected_num_data = enroll_num[enroll_num['구분'] == selected_vehicle]
+selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 
 # 등록 대수 꺾은선 그래프 생성
-fig, ax = plt.subplots(figsize=(10, 6))
+fig1, ax1 = plt.subplots(figsize=(10, 6))
 
 # 그래프 그리기
-ax.plot(selected_num_data['연도'], selected_num_data['등록 대수'], marker='o')
-ax.set_title(f"{selected_vehicle} 연도별 등록 대수")
-ax.set_xlabel("연도")
-ax.set_ylabel("등록 대수")
+ax1.plot(selected_num_data['연도'], selected_num_data['등록 대수'], marker='o')
+ax1.set_title(f"{selected_vehicle} 연도별 등록 대수")
+ax1.set_xlabel("연도")
+ax1.set_ylabel("등록 대수")
 
 # 세로축 숫자 레이블 제거
-ax.set_yticklabels([])
+ax1.set_yticklabels([])
 
 # 데이터 포인트에 숫자 레이블 추가
 for i, txt in enumerate(selected_num_data['등록 대수']):
-    ax.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0, 10), ha='center')
+    ax1.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0, 10), ha='center')
 
 # 그래프 출력
-st.pyplot(fig)
+st.pyplot(fig1)
 
 # 등록 비중 막대 그래프 생성 (가로 방향)
 fig2, ax2 = plt.subplots(figsize=(10, 6))
@@ -64,5 +67,4 @@ for i, v in enumerate(selected_per_data['등록 비중']):
     ax2.text(v, i, f'{v:.1f}%', va='center', ha='left')
 
 # 그래프 출력
-st.pyplot(fig1)
 st.pyplot(fig2)
