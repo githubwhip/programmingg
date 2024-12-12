@@ -20,8 +20,7 @@ def load_data(file_name):
     return df
 
 def preprocess_data(df, value_name):
-    df = df[~df['구분'].isin(['합계', '기타'])].reset_index(drop=True)
-    df = df.iloc[:, 3:]  # '구분' 열부터 시작하도록 조정
+    df = df.dropna(subset=['구분']).reset_index(drop=True)  # NaN 제거
     df = df.melt(id_vars=["구분"], var_name="연도", value_name=value_name)
     if "대수" in value_name:
         df[value_name] = df[value_name].str.replace(",", "").astype(float)
@@ -30,8 +29,8 @@ def preprocess_data(df, value_name):
     return df
 
 # 데이터 로드 및 전처리
-sales_num = preprocess_data(load_data("salesnumb.csv"), "판매 대수")
-sales_per = preprocess_data(load_data("salesperc.csv"), "판매 비중")  # 판매 비중 데이터 추가
+sales_num = preprocess_data(load_data("/mnt/data/salesnumb.csv"), "판매 대수")
+sales_per = preprocess_data(load_data("/mnt/data/salesperc.csv"), "판매 비중")  # 판매 비중 데이터 추가
 
 # Streamlit 애플리케이션 시작
 st.title("차종별 연도별 판매 현황")
