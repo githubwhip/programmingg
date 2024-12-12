@@ -35,36 +35,42 @@ selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
 selected_num_data = enroll_num[enroll_num['구분'] == selected_vehicle]
 selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 
-# 등록 대수 꺾은선 그래프 생성
-fig1, ax1 = plt.subplots(figsize=(10, 6))
+# 두 개의 병렬 열 생성
+col1, col2 = st.columns(2)
 
-# 그래프 그리기
-ax1.plot(selected_num_data['연도'], selected_num_data['등록 대수'], marker='o')
-ax1.set_title(f"{selected_vehicle} 연도별 등록 대수")
-ax1.set_xlabel("연도")
-ax1.set_ylabel("등록 대수")
+with col1:
+    # 등록 대수 꺾은선 그래프 생성
+    fig1, ax1 = plt.subplots(figsize=(10, 6))
+    
+    # 그래프 그리기
+    ax1.plot(selected_num_data['연도'], selected_num_data['등록 대수'], marker='o')
+    ax1.set_title(f"{selected_vehicle} 연도별 등록 대수")
+    ax1.set_xlabel("연도")
+    ax1.set_ylabel("등록 대수")
+    
+    # 세로축 숫자 레이블 제거
+    ax1.set_yticklabels([])
 
-# 세로축 숫자 레이블 제거
-ax1.set_yticklabels([])
+    # 데이터 포인트에 숫자 레이블 추가
+    for i, txt in enumerate(selected_num_data['등록 대수']):
+        ax1.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0, 10), ha='center')
 
-# 데이터 포인트에 숫자 레이블 추가
-for i, txt in enumerate(selected_num_data['등록 대수']):
-    ax1.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0, 10), ha='center')
+    # 그래프 출력
+    st.pyplot(fig1)
 
-# 그래프 출력
-st.pyplot(fig1)
+with col2:
+    # 등록 비중 막대 그래프 생성 (가로 방향)
+    fig2, ax2 = plt.subplots(figsize=(10, 6))
+    colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
+    
+    ax2.barh(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
+    ax2.set_title(f"{selected_vehicle} 연도별 등록 비중")
+    ax2.set_xlabel("등록 비중 (%)")
+    ax2.set_ylabel("연도")
 
-# 등록 비중 막대 그래프 생성 (가로 방향)
-fig2, ax2 = plt.subplots(figsize=(10, 6))
-colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
-ax2.barh(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
-ax2.set_title(f"{selected_vehicle} 연도별 등록 비중")
-ax2.set_xlabel("등록 비중 (%)")
-ax2.set_ylabel("연도")
+    # 퍼센트 레이블 추가
+    for i, v in enumerate(selected_per_data['등록 비중']):
+        ax2.text(v, i, f'{v:.1f}%', va='center', ha='left')
 
-# 퍼센트 레이블 추가
-for i, v in enumerate(selected_per_data['등록 비중']):
-    ax2.text(v, i, f'{v:.1f}%', va='center', ha='left')
-
-# 그래프 출력
-st.pyplot(fig2)
+    # 그래프 출력
+    st.pyplot(fig2)
