@@ -21,13 +21,13 @@ def load_data(file_name):
 def preprocess_enroll_data(df):
     df = df.iloc[1:]  # 첫 행 제거 (필요 없는 정보)
     df.reset_index(drop=True, inplace=True)
-    df.columns = ["구분", "대수", "연료"] + list(df.columns[3:])
+    df.columns = ["구분"] + list(df.columns[1:])  # '구분'을 그대로 유지
     return df
 
 def preprocess_sales_data(df):
     df = df.iloc[1:]  # 첫 행 제거 (필요 없는 정보)
     df.reset_index(drop=True, inplace=True)
-    df.columns = ["구분", "대수", "국내/수입", "연료"] + list(df.columns[4:])
+    df.columns = ["구분"] + list(df.columns[1:])  # '구분'을 그대로 유지
     return df
 
 enroll_num = preprocess_enroll_data(load_data("enrollnum.csv"))
@@ -42,9 +42,9 @@ option = st.radio("데이터 유형 선택:", ["등록현황", "판매현황"])
 if option == "등록현황":
     # 등록 대수 꺾은선 그래프
     fig1, ax1 = plt.subplots(figsize=(10, 6))
-    for fuel in enroll_num['연료'].unique():
-        ax1.plot(enroll_num.columns[3:], 
-                 enroll_num.loc[enroll_num['연료'] == fuel].iloc[0, 3:], 
+    for fuel in enroll_num['구분'].unique():
+        ax1.plot(enroll_num.columns[1:], 
+                 enroll_num.loc[enroll_num['구분'] == fuel].iloc[0, 1:], 
                  label=fuel)
     ax1.set_title("연료별 연도별 등록 대수")
     ax1.set_xlabel("연도")
@@ -54,8 +54,8 @@ if option == "등록현황":
 
     # 등록 비중 원 그래프
     fig2, ax2 = plt.subplots()
-    ax2.pie(enroll_per.iloc[:, 3:].astype(float).iloc[0], 
-            labels=enroll_per.columns[3:], 
+    ax2.pie(enroll_per.iloc[:, 1:].astype(float).iloc[0], 
+            labels=enroll_per.columns[1:], 
             autopct='%1.1f%%')
     ax2.set_title("연료별 등록 비중")
 
@@ -65,9 +65,9 @@ if option == "등록현황":
 elif option == "판매현황":
     # 판매 대수 꺾은선 그래프
     fig3, ax3 = plt.subplots(figsize=(10, 6))
-    for fuel in sales_num['연료'].unique():
-        ax3.plot(sales_num.columns[4:], 
-                 sales_num.loc[sales_num['연료'] == fuel].iloc[0, 4:], 
+    for fuel in sales_num['구분'].unique():
+        ax3.plot(sales_num.columns[1:], 
+                 sales_num.loc[sales_num['구분'] == fuel].iloc[0, 1:], 
                  label=fuel)
     ax3.set_title("연료별 연도별 판매 대수")
     ax3.set_xlabel("연도")
@@ -77,8 +77,8 @@ elif option == "판매현황":
 
     # 판매 비중 원 그래프
     fig4, ax4 = plt.subplots()
-    ax4.pie(sales_per.iloc[:, 4:].astype(float).iloc[0], 
-            labels=sales_per.columns[4:], 
+    ax4.pie(sales_per.iloc[:, 1:].astype(float).iloc[0], 
+            labels=sales_per.columns[1:], 
             autopct='%1.1f%%')
     ax4.set_title("연료별 판매 비중")
 
