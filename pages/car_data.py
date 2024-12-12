@@ -19,12 +19,27 @@ def load_data(file_name):
     return df
 
 def preprocess_data(df, value_name):
-    df = df.iloc[1:]  # 첫 행 제거 (필요 없는 정보)
-    df.reset_index(drop=True, inplace=True)
-    df.columns = ["구분"] + list(df.columns[1:])  # '구분' 열을 유지
-    df = df.melt(id_vars=["구분"], var_name="연도", value_name=value_name)  # 데이터를 긴 형식으로 변환
+    # 불필요한 첫 두 행 제거 및 열 이름 정리
+    df = df.iloc[1:].reset_index(drop=True)  # 첫 행 제거 후 인덱스 재설정
+    df.columns = ["구분"] + list(df.columns[1:])  # 첫 번째 열은 '구분', 나머지는 연도로 설정
+    
+    # 불필요한 열 제거 (예: Unnamed 열)
+    df = df.loc[:, ~df.columns.str.contains("Unnamed")]
+    
+    # 데이터 변환 (긴 형식으로 변경)
+    df = df.melt(id_vars=["구분"], var_name="연도", value_name=value_name)
+    
+    # 값에서 쉼표 제거 및 숫자로 변환 (등록 대수/판매 대수)
+    if "대수" in value_name:
+        df[value_name] = df[value_name].str.replace(",", "").astype(float)
+    
+    # 비중 데이터의 경우 % 기호 제거 후 숫자로 변환
+    elif "비중" in value_name:
+        df[value_name] = df[value_name].str.replace("%", "").astype(float)
+    
     return df
 
+# 데이터 로드 및 전처리
 enroll_num = preprocess_data(load_data("enrollnum.csv"), "등록 대수")
 enroll_per = preprocess_data(load_data("enrollper.csv"), "등록 비중")
 sales_num = preprocess_data(load_data("salesnum.csv"), "판매 대수")
@@ -50,7 +65,7 @@ if option == "등록현황":
     fig2, ax2 = plt.subplots()
     latest_year = enroll_per['연도'].max()
     latest_data = enroll_per[enroll_per['연도'] == latest_year]
-    ax2.pie(latest_data['등록 비중'].astype(float), 
+    ax2.pie(latest_data['등록 비중'], 
             labels=latest_data['구분'], 
             autopct='%1.1f%%')
     ax2.set_title(f"{latest_year} 연료별 등록 비중")
@@ -74,7 +89,7 @@ elif option == "판매현황":
     fig4, ax4 = plt.subplots()
     latest_year = sales_per['연도'].max()
     latest_data = sales_per[sales_per['연도'] == latest_year]
-    ax4.pie(latest_data['판매 비중'].astype(float), 
+    ax4.pie(latest_data['판매 비중'], 
             labels=latest_data['구분'], 
             autopct='%1.1f%%')
     ax4.set_title(f"{latest_year} 연료별 판매 비중")
@@ -94,6 +109,7 @@ if st.button("답변 저장"):
         "P1A1": [q1],
         "P1A2": [q2]
     }
+    
     answer_df = pd.DataFrame(answer_data)
     
     # 파일에 헤더 없이 추가 모드로 저장
