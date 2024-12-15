@@ -33,7 +33,7 @@ if submit_button:
             time.sleep(1)
             my_bar.empty()
             if st.button("학습하러 가기"):
-                st.switch_page("car_enrollment_data.py")            
+                st.switch_page("pages/car_enrollment_data.py")            
             
         else:
             st.error("아이디 또는 비밀번호가 일치하지 않습니다.")
