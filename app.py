@@ -33,7 +33,7 @@ if submit_button:
             time.sleep(1)
             my_bar.empty()
             if st.button("등록 현황 학습하러 가기"):
-                st.switch_page("pages/car_enrollment_data.py")
+               st.switch_page("pages/car_enrollment_data.py")
             if st.button("판매 현황 학습하러 가기"):
                 st.switch_page("pages/car_sales_data.py")
 
