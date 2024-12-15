@@ -5,6 +5,8 @@ import random
 import koreanize_matplotlib
 from matplotlib.ticker import MultipleLocator
 from matplotlib import font_manager, rc
+from io import BytesIO
+import time
 
 # 폰트 설정
 font_path = "fonts/malgun.ttf"
