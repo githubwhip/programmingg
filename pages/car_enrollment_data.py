@@ -5,6 +5,7 @@ import random
 import koreanize_matplotlib
 from matplotlib import font_manager, rc
 from io import BytesIO
+import time
 
 # 폰트 설정
 font_path = "fonts/malgun.ttf"
@@ -12,6 +13,11 @@ font_manager.fontManager.addfont(font_path)
 rc('font', family='Malgun Gothic')
 plt.rcParams['font.family'] = 'Malgun Gothic'
 
+#로그인 상태 확인
+if not st.session_state.get("authenticated", False):
+    st.warning("로그인이 필요합니다. [로그인 페이지로 돌아가기](./)")
+    st.stop()
+    
 # 데이터 로드 및 전처리 함수
 @st.cache_data
 def load_data(file_name):
