@@ -72,7 +72,8 @@ with col2:
     fig2, ax2 = plt.subplots(figsize=(10, 6))
     colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
     
-    ax2.barh(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
+    # '판매 비중' 열을 사용하도록 수정
+    ax2.barh(selected_per_data['연도'], selected_per_data['판매 비중'], color=colors)
     ax2.set_title(f"{selected_vehicle} 연도별 판매 비중")
     ax2.set_xlabel("판매 비중 (%)")
     ax2.set_ylabel("연도")
