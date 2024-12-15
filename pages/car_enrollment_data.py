@@ -90,7 +90,7 @@ st.header("학습지")
 
 # 학습지 질문
 def add_question(image, question):
-    st.image(image, width=300)
+    st.image(image)
     return st.text_input(question)
 
 answer_1 = add_question("hybrid.png", 
