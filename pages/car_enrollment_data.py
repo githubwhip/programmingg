@@ -134,3 +134,6 @@ if st.button("답변 파일 다운로드"):
                        data=excel_data,
                        file_name="answers.xlsx",
                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+if st.button("계속 학습하러 가기"):
+    if st.button("학습하러 가기"):
+    st.switch_page("pages/car_sales_data.py")
