@@ -32,8 +32,8 @@ if submit_button:
                 my_bar.progress(percent_complete + 1, text=progress_text)
             time.sleep(1)
             my_bar.empty()
-            st.page_link("car_enrollment_data.py", label="학습하러 가기")
-            
+            if st.button("학습하러 가기"):
+                st.switch_page("car_enrollment_data.py")            
             
         else:
             st.error("아이디 또는 비밀번호가 일치하지 않습니다.")
