@@ -32,7 +32,7 @@ if submit_button:
                 my_bar.progress(percent_complete + 1, text=progress_text)
             time.sleep(1)
             my_bar.empty()
-            st.experimental_set_query_params(page = "car_enrollment_data.py")
+            st.write("[학습하러 가기](./?page=car_enrollment_data)")
             
             
         else:
