@@ -93,12 +93,14 @@ def add_question(image, question):
     st.image(image)
     return st.text_input(question)
 
-answer_1 = add_question("hybrid.png", 
+answer_1 = add_question("학번과 이름을 적어주세요. (예: 2024-25986 정유미")
+
+answer_2 = add_question("hybrid.png", 
                         "1. 하이브리드 차 연도별 등록 대수 현황을 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? (예: 100,000부터 시작하여 10만 단위 간격으로 표시 등)")
-answer_2 = add_question("oil.png", 
+answer_3 = add_question("oil.png", 
                         "2. 경유의 등록대수는 2019년도에 비해 2020년도가 높습니다. 그러나 2019년도에 비해 2020년도의 경유의 등록 비중은 줄어들었다. 그 이유를 추론해서 적어보세요.")
-answer_3 = st.text_input("3. 시간이 흐름에 따라 등록 대수와 등록 비중이 증가하는 차종은 어떤 것인가요? (예: 휘발유 등)")
-answer_4 = st.text_area("4. 여러분이 연도별 차종 등록 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.")
+answer_4 = st.text_input("3. 시간이 흐름에 따라 등록 대수와 등록 비중이 증가하는 차종은 어떤 것인가요? (예: 휘발유 등)")
+answer_5 = st.text_area("4. 여러분이 연도별 차종 등록 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.")
 
 # 답변을 모아 엑셀 파일로 저장 및 다운로드
 def download_answers(answers):
@@ -113,12 +115,11 @@ import json
 
 if st.button("답변 파일 다운로드"):
     data_to_save = {
-        "1. 하이브리드 차 관련 질문": answer_1,
-        "2. 경유 관련 질문": answer_2,
-        "3. 등록 대수/비중 증가 차종": answer_3,
-        "4. 느낀 점": answer_4,
-        "로그인 정보": {
-            "username": st.session_state.get('username', '로그인 정보 없음')
+        "1. 학번": answer_1,
+        "2. 하이브리드 차 관련 질문": answer_2,
+        "3. 경유 관련 질문": answer_3,
+        "4. 등록 대수/비중 증가 차종": answer_4,
+        "5. 느낀 점": answer_5
         }
     }
     excel_data = download_answers(data_to_save)
