@@ -148,10 +148,10 @@ import json
 if st.button("답변 파일 다운로드"):
     data_to_save = {
         "1. 학번": answer_0,
-        "1. 휘발유 판매대수": answer_1,
-        "2. LPG 차 판매 대수": answer_2,
-        "3. 판매 대수/비중 증가 차종": answer_3,
-        "4. 느낀 점": answer_4
+        "2. 휘발유 판매대수": answer_1,
+        "3. LPG 차 판매 대수": answer_2,
+        "4. 판매 대수/비중 증가 차종": answer_3,
+        "5. 느낀 점": answer_4
     }
     
     excel_data = download_answers(data_to_save)
