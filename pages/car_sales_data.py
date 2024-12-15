@@ -30,8 +30,8 @@ def preprocess_data(df, value_name):
     return df
 
 # 데이터 로드 및 전처리
-enroll_num = preprocess_data(load_data("salesnumb.csv"), "판매 대수")
-enroll_per = preprocess_data(load_data("salesperc.csv"), "판매 비중")  # 등록 비중 데이터 추가
+enroll_num = preprocess_data(load_data("salesnum.csv"), "판매 대수")
+enroll_per = preprocess_data(load_data("salesper.csv"), "판매 비중")  # 등록 비중 데이터 추가
 
 # Streamlit 애플리케이션 시작
 st.title("차종별 연도별 판매 현황")
