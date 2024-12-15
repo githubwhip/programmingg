@@ -107,15 +107,19 @@ def download_answers(answers):
         df.to_excel(writer, index=False, sheet_name="Answers")
     return output.getvalue()
 
-# 답변 수집
-data_to_save = {
-    "1. 하이브리드 차 관련 질문": answer_1,
-    "2. 경유 관련 질문": answer_2,
-    "3. 등록 대수/비중 증가 차종": answer_3,
-    "4. 느낀 점": answer_4
-}
+
+import json
 
 if st.button("답변 파일 다운로드"):
+    data_to_save = {
+        "1. 하이브리드 차 관련 질문": answer_1,
+        "2. 경유 관련 질문": answer_2,
+        "3. 등록 대수/비중 증가 차종": answer_3,
+        "4. 느낀 점": answer_4,
+        "로그인 정보": {
+            "username": st.session_state.get('username', '로그인 정보 없음')
+        }
+    }
     excel_data = download_answers(data_to_save)
     st.download_button(label="답변 엑셀 파일 다운로드",
                        data=excel_data,
