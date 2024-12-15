@@ -22,7 +22,8 @@ if submit_button:
         
         if not user.empty:
             st.success(f"{ID}님 환영합니다!")
-            st.session_state["ID"]=ID
+            st.session_state["authenticated"]=True
+            st.session_state["ID"] = ID
             
             progress_text = "로그인 중입니다."
             my_bar = st.progress(0, text=progress_text)
@@ -31,7 +32,7 @@ if submit_button:
                 my_bar.progress(percent_complete + 1, text=progress_text)
             time.sleep(1)
             my_bar.empty()
-            st.switch_page("pages/car_enrollment_data.py")
+            st.experimental_set_query_params(page = "car_enrollment_data.py")
             
             
         else:
