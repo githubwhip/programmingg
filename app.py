@@ -35,10 +35,10 @@ if submit_button:
             
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("등록 현황 학습"):
+                if st.button("등록 현황 학습", key="enrollment"):
                     st.switch_page("pages/car_enrollment_data.py")
             with col2:
-                if st.button("판매 현황 학습"):
+                if st.button("판매 현황 학습", key="sales"):
                     st.switch_page("pages/car_sales_data.py")
         else:
             st.error("아이디 또는 비밀번호가 일치하지 않습니다.")
