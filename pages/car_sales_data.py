@@ -49,10 +49,23 @@ selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 # 두 개의 병렬 열 생성
 col1, col2 = st.columns(2)
 
+
 with col1:
     # 등록 대수 꺾은선 그래프 생성
     fig1, ax1 = plt.subplots(figsize=(16, 12))
+    # 폰트 크기 설정
+    plt.rcParams['font.size'] = 14  # 기본 폰트 크기
+    ax1.tick_params(axis='both', labelsize=12)  # 축 레이블 크기
+    ax1.set_title(f"{selected_vehicle} 연도별 판매 대수", fontsize=16)  # 제목 크기
+    ax1.set_xlabel("연도", fontsize=14)  # x축 레이블 크기
+    ax1.set_ylabel("판매 대수", fontsize=14)  # y축 레이블 크기
     
+    # 데이터 포인트 레이블 크기 증가
+    for i, txt in enumerate(selected_num_data['판매 대수']):
+        ax1.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), 
+                    textcoords="offset points", xytext=(0, 10), 
+                    ha='center', fontsize=12)
+  
     # 그래프 그리기
     ax1.plot(selected_num_data['연도'], selected_num_data['판매 대수'], marker='o')
     ax1.set_title(f"{selected_vehicle} 연도별 판매 대수")
@@ -68,12 +81,24 @@ with col1:
 
     # 그래프 출력
     st.pyplot(fig1)
-
+    
 with col2:
     # 등록 비중 막대 그래프 생성 (가로 방향)
     fig2, ax2 = plt.subplots(figsize=(16, 12))
     colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
+        
+    # 폰트 크기 설정
+    ax2.tick_params(axis='both', labelsize=12)  # 축 레이블 크기
+    ax2.set_title(f"{selected_vehicle} 연도별 판매 비중", fontsize=16)  # 제목 크기
+    ax2.set_xlabel("판매 비중 (%)", fontsize=14)  # x축 레이블 크기
+    ax2.set_ylabel("연도", fontsize=14)  # y축 레이블 크기
     
+    # 퍼센트 레이블 크기 증가
+    for i, v in enumerate(selected_per_data['판매 비중']):
+        ax2.text(v, i, f'{v:.1f}%', va='center', ha='left', fontsize=12)
+
+
+
     # '판매 비중' 열을 사용하도록 수정
     ax2.barh(selected_per_data['연도'], selected_per_data['판매 비중'], color=colors)
     ax2.set_title(f"{selected_vehicle} 연도별 판매 비중")
