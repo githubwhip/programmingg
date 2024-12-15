@@ -13,6 +13,7 @@ df = pd.DataFrame({
 })
 
 # 지도 생성
+# 지도 생성
 m = folium.Map(location=[36.5, 127.5], zoom_start=7)
 
 # 마커 클러스터 생성
@@ -20,21 +21,33 @@ marker_cluster = MarkerCluster().add_to(m)
 
 # 원형 마커와 텍스트 추가
 for idx, row in df.iterrows():
+    # 숫자를 천 단위 구분자로 포맷팅
+    formatted_number = format(row['합계'], ',')
+    
     folium.Circle(
         location=[row['위도'], row['경도']],
-        radius=row['합계']/100,  # 원의 크기 조절
-        popup=f"{row['지역']}: {row['합계']}",
+        radius=row['합계']/100,
         color='blue',
         fill=True,
         fill_color='blue',
         fill_opacity=0.4
     ).add_to(marker_cluster)
     
+    # HTML에서 텍스트 크기를 키우고 포맷팅된 숫자 사용
+    html_content = f"""
+        <div style='font-size: 14pt; font-weight: bold; text-align: center;'>
+            {row['지역']}<br>{formatted_number}
+        </div>
+    """
+    
     folium.map.Marker(
         [row['위도'], row['경도']],
-        icon=folium.DivIcon(html=f"<div style='font-size: 10pt; font-weight: bold;'>{row['지역']}<br>{row['합계']:,}</div>")
+        icon=folium.DivIcon(
+            html=html_content,
+            icon_size=(150,50),
+            icon_anchor=(75,25)
+        )
     ).add_to(marker_cluster)
 
-# 스트림릿에 지도 표시
 st.title('지역별 자동차 등록 현황')
 folium_static(m)
