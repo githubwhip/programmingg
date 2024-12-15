@@ -3,3 +3,5 @@ matplotlib
 koreanize-matplotlib
 setuptools
 xlsxwriter
+folium
+streamlit-folium
