@@ -17,6 +17,8 @@ plt.rcParams['font.family'] = 'Malgun Gothic'
 if not st.session_state.get("authenticated", False):
     st.warning("로그인이 필요합니다. [로그인 페이지로 돌아가기](./)")
     st.stop()
+st.session_state['username'] = current_user
+
     
 # 데이터 로드 및 전처리 함수
 @st.cache_data
