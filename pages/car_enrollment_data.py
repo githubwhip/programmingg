@@ -88,7 +88,8 @@ with col2:
 st.header("학습지")
 
 # 질문 1
-st.image("hybrid.png")
+st.image("alcohol.png", width=300)  # 이미지 너비를 300픽셀로 설정
+
 answer_1 = st.text_input("1. 하이브리드 차 연도별 등록 대수 현황을 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? \n(예: 100,000부터 시작하여 10만 단위 간격으로 표시 등)")
 
 # 질문 2
