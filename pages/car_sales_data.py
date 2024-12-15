@@ -37,7 +37,9 @@ enroll_per = preprocess_data(load_data("salesper.csv"), "판매 비중")  # 등�
 st.title("차종별 연도별 판매 현황")
 
 # 사용자 입력: 차종 선택
-vehicle_types = enroll_num['구분'][~enroll_num['구분'].isin(['소계', 'nan'])].unique().tolist()
+# 사용자 입력: 차종 선택
+vehicle_types = enroll_num['구분'].dropna().unique().tolist()  # NaN 값 제거
+vehicle_types = [x for x in vehicle_types if x != '소계']  # '소계' 제거
 selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
 
 # 선택된 차종에 대한 데이터 필터링
