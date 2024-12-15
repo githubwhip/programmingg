@@ -51,7 +51,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     # 등록 대수 꺾은선 그래프 생성
-    fig1, ax1 = plt.subplots(figsize=(10, 6))
+    fig1, ax1 = plt.subplots(figsize=(12, 8))
     
     # 그래프 그리기
     ax1.plot(selected_num_data['연도'], selected_num_data['판매 대수'], marker='o')
@@ -71,7 +71,7 @@ with col1:
 
 with col2:
     # 등록 비중 막대 그래프 생성 (가로 방향)
-    fig2, ax2 = plt.subplots(figsize=(10, 6))
+    fig2, ax2 = plt.subplots(figsize=(12, 8))
     colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
     
     # '판매 비중' 열을 사용하도록 수정
