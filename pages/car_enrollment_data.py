@@ -3,8 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import random
 import koreanize_matplotlib
-from matplotlib.ticker import MultipleLocator
 from matplotlib import font_manager, rc
+from io import BytesIO
 
 # 폰트 설정
 font_path = "fonts/malgun.ttf"
@@ -31,7 +31,34 @@ def preprocess_data(df, value_name):
 
 # 데이터 로드 및 전처리
 enroll_num = preprocess_data(load_data("enrollnum.csv"), "등록 대수")
-enroll_per = preprocess_data(load_data("enrollper.csv"), "등록 비중")  # 등록 비중 데이터 추가
+enroll_per = preprocess_data(load_data("enrollper.csv"), "등록 비중")
+
+# 그래프 생성 함수
+def plot_num_trend(data, vehicle_type):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(data['연도'], data['등록 대수'], marker='o')
+    ax.set_title(f"{vehicle_type} 연도별 등록 대수")
+    ax.set_xlabel("연도")
+    ax.set_ylabel("등록 대수")
+    ax.set_yticklabels([])
+
+    for i, txt in enumerate(data['등록 대수']):
+        ax.annotate(f'{int(txt):,}', (data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0, 10), ha='center')
+
+    return fig
+
+def plot_percentage_trend(data, vehicle_type):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(data))]
+    ax.barh(data['연도'], data['등록 비중'], color=colors)
+    ax.set_title(f"{vehicle_type} 연도별 등록 비중")
+    ax.set_xlabel("등록 비중 (%)")
+    ax.set_ylabel("연도")
+
+    for i, v in enumerate(data['등록 비중']):
+        ax.text(v, i, f'{v:.1f}%', va='center', ha='left')
+
+    return fig
 
 # Streamlit 애플리케이션 시작
 st.title("차종별 연도별 등록 현황")
@@ -40,64 +67,40 @@ st.title("차종별 연도별 등록 현황")
 vehicle_types = enroll_num['구분'].unique()
 selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
 
-# 선택된 차종에 대한 데이터 필터링
+# 선택된 차종 데이터 필터링
 selected_num_data = enroll_num[enroll_num['구분'] == selected_vehicle]
 selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 
 # 두 개의 병렬 열 생성
 col1, col2 = st.columns(2)
-
 with col1:
-    # 등록 대수 꺾은선 그래프 생성
-    fig1, ax1 = plt.subplots(figsize=(10, 6))
-    
-    # 그래프 그리기
-    ax1.plot(selected_num_data['연도'], selected_num_data['등록 대수'], marker='o')
-    ax1.set_title(f"{selected_vehicle} 연도별 등록 대수")
-    ax1.set_xlabel("연도")
-    ax1.set_ylabel("등록 대수")
-    
-    # 세로축 숫자 레이블 제거
-    ax1.set_yticklabels([])
-
-    # 데이터 포인트에 숫자 레이블 추가
-    for i, txt in enumerate(selected_num_data['등록 대수']):
-        ax1.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0, 10), ha='center')
-
-    # 그래프 출력
-    st.pyplot(fig1)
-
+    st.pyplot(plot_num_trend(selected_num_data, selected_vehicle))
 with col2:
-    # 등록 비중 막대 그래프 생성 (가로 방향)
-    fig2, ax2 = plt.subplots(figsize=(10, 6))
-    colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
-    
-    ax2.barh(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
-    ax2.set_title(f"{selected_vehicle} 연도별 등록 비중")
-    ax2.set_xlabel("등록 비중 (%)")
-    ax2.set_ylabel("연도")
+    st.pyplot(plot_percentage_trend(selected_per_data, selected_vehicle))
 
-    # 퍼센트 레이블 추가
-    for i, v in enumerate(selected_per_data['등록 비중']):
-        ax2.text(v, i, f'{v:.1f}%', va='center', ha='left')
-
-    # 그래프 출력
-    st.pyplot(fig2)
-
-# 학습지 섹션 추가
+# 학습지 섹션
 st.header("학습지")
 
-# 질문 1
-st.image("hybrid.png", width=00)  # 이미지 너비를 300픽셀로 설정
+# 학습지 질문
+def add_question(image, question):
+    st.image(image, width=300)
+    return st.text_input(question)
 
-answer_1 = st.text_input("1. 하이브리드 차 연도별 등록 대수 현황을 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? \n(예: 100,000부터 시작하여 10만 단위 간격으로 표시 등)")
-
-# 질문 2
-st.image("oil.png")
-answer_2 = st.text_input("2. 경유의 등록대수는 2019년도에 비해 2020년도가 높습니다. 그러나 2019년도에 비해 2020년도의 경유의 등록 비중은 줄어들었다.  \n그 이유를 추론해서 적어보세요.")
-
-# 질문 3
-answer_3 = st.text_input("3. 시간이 흐름에 따라 등록 대수와 등록 비중이 증가하는 차종은 어떤 것인가요? \n(예: 휘발유 등)")
-
-# 질문 4
+answer_1 = add_question("hybrid.png", 
+                        "1. 하이브리드 차 연도별 등록 대수 현황을 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? (예: 100,000부터 시작하여 10만 단위 간격으로 표시 등)")
+answer_2 = add_question("oil.png", 
+                        "2. 경유의 등록대수는 2019년도에 비해 2020년도가 높습니다. 그러나 2019년도에 비해 2020년도의 경유의 등록 비중은 줄어들었다. 그 이유를 추론해서 적어보세요.")
+answer_3 = st.text_input("3. 시간이 흐름에 따라 등록 대수와 등록 비중이 증가하는 차종은 어떤 것인가요? (예: 휘발유 등)")
 answer_4 = st.text_area("4. 여러분이 연도별 차종 등록 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.")
+
+# 다운로드 버튼 (데이터 저장)
+def download_excel(df, filename):
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+        df.to_excel(writer, index=False, sheet_name="Sheet1")
+    return output.getvalue()
+
+if st.button("엑셀로 데이터 다운로드"):
+    excel_data = download_excel(enroll_num, "등록_대수.xlsx")
+    st.download_button(label="엑셀 다운로드", data=excel_data, file_name="등록_대수.xlsx",
+                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
