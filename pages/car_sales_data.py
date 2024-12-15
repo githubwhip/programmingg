@@ -56,7 +56,7 @@ with col1:
     # 폰트 크기 설정
     plt.rcParams['font.size'] = 14  # 기본 폰트 크기
     ax1.tick_params(axis='both', labelsize=12)  # 축 레이블 크기
-    ax1.set_title(f"{selected_vehicle} 연도별 판매 대수", fontsize=16)  # 제목 크기
+    ax1.set_title(f"{selected_vehicle} 연도별 판매 대수", fontsize=20)  # 제목 크기
     ax1.set_xlabel("연도", fontsize=14)  # x축 레이블 크기
     ax1.set_ylabel("판매 대수", fontsize=14)  # y축 레이블 크기
     
@@ -75,10 +75,6 @@ with col1:
     # 세로축 숫자 레이블 제거
     ax1.set_yticklabels([])
 
-    # 데이터 포인트에 숫자 레이블 추가
-    for i, txt in enumerate(selected_num_data['판매 대수']):
-        ax1.annotate(f'{int(txt):,}', (selected_num_data['연도'].iloc[i], txt), textcoords="offset points", xytext=(0, 10), ha='center')
-
     # 그래프 출력
     st.pyplot(fig1)
     
@@ -89,7 +85,7 @@ with col2:
         
     # 폰트 크기 설정
     ax2.tick_params(axis='both', labelsize=12)  # 축 레이블 크기
-    ax2.set_title(f"{selected_vehicle} 연도별 판매 비중", fontsize=16)  # 제목 크기
+    ax2.set_title(f"{selected_vehicle} 연도별 판매 비중", fontsize=20)  # 제목 크기
     ax2.set_xlabel("판매 비중 (%)", fontsize=14)  # x축 레이블 크기
     ax2.set_ylabel("연도", fontsize=14)  # y축 레이블 크기
     
@@ -105,9 +101,6 @@ with col2:
     ax2.set_xlabel("판매 비중 (%)")
     ax2.set_ylabel("연도")
 
-    # 퍼센트 레이블 추가
-    for i, v in enumerate(selected_per_data['판매 비중']):
-        ax2.text(v, i, f'{v:.1f}%', va='center', ha='left')
 
     # 그래프 출력
     st.pyplot(fig2)
