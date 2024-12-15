@@ -6,7 +6,6 @@ import koreanize_matplotlib
 from matplotlib import font_manager, rc
 from io import BytesIO
 
-
 # 폰트 설정
 font_path = "fonts/malgun.ttf"
 font_manager.fontManager.addfont(font_path)
@@ -94,14 +93,25 @@ answer_2 = add_question("oil.png",
 answer_3 = st.text_input("3. 시간이 흐름에 따라 등록 대수와 등록 비중이 증가하는 차종은 어떤 것인가요? (예: 휘발유 등)")
 answer_4 = st.text_area("4. 여러분이 연도별 차종 등록 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.")
 
-# 다운로드 버튼 (데이터 저장)
-def download_excel(df, filename):
+# 답변을 모아 엑셀 파일로 저장 및 다운로드
+def download_answers(answers):
+    df = pd.DataFrame(list(answers.items()), columns=["질문", "답변"])
     output = BytesIO()
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
-        df.to_excel(writer, index=False, sheet_name="Sheet1")
+        df.to_excel(writer, index=False, sheet_name="Answers")
     return output.getvalue()
 
-if st.button("엑셀로 데이터 다운로드"):
-    excel_data = download_excel(enroll_num, "등록_대수.xlsx")
-    st.download_button(label="엑셀 다운로드", data=excel_data, file_name="등록_대수.xlsx",
+# 답변 수집
+data_to_save = {
+    "1. 하이브리드 차 관련 질문": answer_1,
+    "2. 경유 관련 질문": answer_2,
+    "3. 등록 대수/비중 증가 차종": answer_3,
+    "4. 느낀 점": answer_4
+}
+
+if st.button("답변 파일 다운로드"):
+    excel_data = download_answers(data_to_save)
+    st.download_button(label="답변 엑셀 파일 다운로드",
+                       data=excel_data,
+                       file_name="answers.xlsx",
                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
