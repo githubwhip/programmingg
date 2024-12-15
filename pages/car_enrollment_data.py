@@ -6,6 +6,7 @@ import koreanize_matplotlib
 from matplotlib import font_manager, rc
 from io import BytesIO
 
+
 # 폰트 설정
 font_path = "fonts/malgun.ttf"
 font_manager.fontManager.addfont(font_path)
