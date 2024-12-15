@@ -12,6 +12,14 @@ font_manager.fontManager.addfont(font_path)
 rc('font', family='Malgun Gothic')
 plt.rcParams['font.family'] = 'Malgun Gothic'
 
+
+#로그인 상태 확인
+if not st.session_state.get("authenticated", False):
+    st.warning("로그인이 필요합니다. [로그인 페이지로 돌아가기](./)")
+    st.stop()
+
+
+
 # 데이터 로드 및 전처리 함수
 @st.cache_data
 def load_data(file_name):
@@ -108,6 +116,9 @@ with col2:
 # 학습지 섹션 추가
 st.header("학습지")
 
+# 학번과 이름을 입력 받는 부분
+answer_0 = st.text_input("1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
+
 # 질문 1
 st.image("alcohol.png")
 answer_1 = st.text_input("1. 휘발유의 판매대수는 2020년도에 비해 2021년도가 낮습니다. 그러나 2020년도에 비해 2021년도의 휘발유의 등록 비중은 늘어났습니다. \n그 이유를 추론해서 적어보세요.")
@@ -121,3 +132,31 @@ answer_3 = st.text_input("3. 시간이 흐름에 따라 판매 대수와 판매 
 
 # 질문 4
 answer_4 = st.text_area("4. 여러분이 연도별 차종 판매 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.")
+
+# 답변을 모아 엑셀 파일로 저장 및 다운로드
+def download_answers(answers):
+    df = pd.DataFrame(list(answers.items()), columns=["질문", "답변"])
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
+        df.to_excel(writer, index=False, sheet_name="Answers")
+    return output.getvalue()
+
+import json
+
+if st.button("답변 파일 다운로드"):
+    data_to_save = {
+        "1. 학번": answer_0,
+        "1. 휘발유 판매대수": answer_1,
+        "2. LPG 차 판매 대수": answer_2,
+        "3. 판매 대수/비중 증가 차종": answer_3,
+        "4. 느낀 점": answer_4
+    }
+    
+    excel_data = download_answers(data_to_save)
+    st.download_button(label="답변 엑셀 파일 다운로드",
+                       data=excel_data,
+                       file_name="answers.xlsx",
+                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+if st.button("계속 학습하러 가기"):
+    st.switch_page("pages/car_sales_data.py")
