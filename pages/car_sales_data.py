@@ -52,7 +52,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     # 등록 대수 꺾은선 그래프 생성
-    fig1, ax1 = plt.subplots(figsize=(16, 12))
+    fig1, ax1 = plt.subplots(figsize=(10, 6))
     # 폰트 크기 설정
     plt.rcParams['font.size'] = 14  # 기본 폰트 크기
     ax1.tick_params(axis='both', labelsize=12)  # 축 레이블 크기
@@ -80,7 +80,7 @@ with col1:
     
 with col2:
     # 등록 비중 막대 그래프 생성 (가로 방향)
-    fig2, ax2 = plt.subplots(figsize=(16, 12))
+    fig2, ax2 = plt.subplots(figsize=(10, 6))
     colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
         
     # 폰트 크기 설정
