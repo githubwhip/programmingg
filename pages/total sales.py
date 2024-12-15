@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import folium_static
+from folium.plugins import MarkerCluster
 
 # 데이터프레임 생성
 df = pd.DataFrame({
@@ -14,17 +15,25 @@ df = pd.DataFrame({
 # 지도 생성
 m = folium.Map(location=[36.5, 127.5], zoom_start=7)
 
-# 원형 마커 추가
+# 마커 클러스터 생성
+marker_cluster = MarkerCluster().add_to(m)
+
+# 원형 마커와 텍스트 추가
 for idx, row in df.iterrows():
-    folium.CircleMarker(
+    folium.Circle(
         location=[row['위도'], row['경도']],
-        radius=row['합계']/2000,  # 원의 크기 조절
+        radius=row['합계']/100,  # 원의 크기 조절
         popup=f"{row['지역']}: {row['합계']}",
         color='blue',
         fill=True,
         fill_color='blue',
-        fill_opacity=0.6
-    ).add_to(m)
+        fill_opacity=0.4
+    ).add_to(marker_cluster)
+    
+    folium.map.Marker(
+        [row['위도'], row['경도']],
+        icon=folium.DivIcon(html=f"<div style='font-size: 10pt; font-weight: bold;'>{row['지역']}<br>{row['합계']:,}</div>")
+    ).add_to(marker_cluster)
 
 # 스트림릿에 지도 표시
 st.title('지역별 자동차 등록 현황')
