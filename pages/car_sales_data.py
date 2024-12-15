@@ -20,7 +20,8 @@ def load_data(file_name):
     return df
 
 def preprocess_data(df, value_name):
-    df = df.dropna(subset=['구분']).reset_index(drop=True)  # NaN 제거
+    df = df[~df['구분'].isin(['합계', '기타'])].reset_index(drop=True)
+    df = df.iloc[:, 3:]  # '구분' 열부터 시작하도록 조정
     df = df.melt(id_vars=["구분"], var_name="연도", value_name=value_name)
     if "대수" in value_name:
         df[value_name] = df[value_name].str.replace(",", "").astype(float)
@@ -29,25 +30,25 @@ def preprocess_data(df, value_name):
     return df
 
 # 데이터 로드 및 전처리
-sales_num = preprocess_data(load_data("salesnumb.csv"), "판매 대수")
-sales_per = preprocess_data(load_data("salesperc.csv"), "판매 비중")  # 판매 비중 데이터 추가
+enroll_num = preprocess_data(load_data("salesnumb.csv"), "판매 대수")
+enroll_per = preprocess_data(load_data("salesperc.csv"), "판매 비중")  # 등록 비중 데이터 추가
 
 # Streamlit 애플리케이션 시작
 st.title("차종별 연도별 판매 현황")
 
 # 사용자 입력: 차종 선택
-vehicle_types = sales_num['구분'].unique()
+vehicle_types = enroll_num['구분'].unique()
 selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
 
 # 선택된 차종에 대한 데이터 필터링
-selected_num_data = sales_num[sales_num['구분'] == selected_vehicle]
-selected_per_data = sales_per[sales_per['구분'] == selected_vehicle]
+selected_num_data = enroll_num[enroll_num['구분'] == selected_vehicle]
+selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 
 # 두 개의 병렬 열 생성
 col1, col2 = st.columns(2)
 
 with col1:
-    # 판매 대수 꺾은선 그래프 생성
+    # 등록 대수 꺾은선 그래프 생성
     fig1, ax1 = plt.subplots(figsize=(10, 6))
     
     # 그래프 그리기
@@ -67,11 +68,11 @@ with col1:
     st.pyplot(fig1)
 
 with col2:
-    # 판매 비중 막대 그래프 생성 (가로 방향)
+    # 등록 비중 막대 그래프 생성 (가로 방향)
     fig2, ax2 = plt.subplots(figsize=(10, 6))
     colors = ["#%06x" % random.randint(0, 0xFFFFFF) for _ in range(len(selected_per_data))]
     
-    ax2.barh(selected_per_data['연도'], selected_per_data['판매 비중'], color=colors)
+    ax2.barh(selected_per_data['연도'], selected_per_data['등록 비중'], color=colors)
     ax2.set_title(f"{selected_vehicle} 연도별 판매 비중")
     ax2.set_xlabel("판매 비중 (%)")
     ax2.set_ylabel("연도")
@@ -87,13 +88,13 @@ with col2:
 st.header("학습지")
 
 # 질문 1
-answer_1 = st.text_input("1. 하이브리드 차 판매 대수를 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? \n(예: 100,000부터 시작하여 10만 단위 간격으로 표시 등)")
+answer_1 = st.text_input("1. 하이브리드 차 등록 대수를 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? \n(예: 100,000부터 시작하여 10만 단위 간격으로 표시 등)")
 
 # 질문 2
-answer_2 = st.text_input("2. 연도별 판매 대수와 판매 비중이 가장 높은 차종은 어떤 것인가요? \n(예: 수소 등)")
+answer_2 = st.text_input("2. 연도별 등록 대수와 등록 비중이 가장 높은 차종은 어떤 것인가요? \n(예: 수소 등)")
 
 # 질문 3
-answer_3 = st.text_input("3. 시간이 흐름에 따라 판매 대수와 판매 비중이 증가하는 차종은 어떤 것인가요? \n(예: 휘발유 등)")
+answer_3 = st.text_input("3. 시간이 흐름에 따라 등록 대수와 등록 비중이 증가하는 차종은 어떤 것인가요? \n(예: 휘발유 등)")
 
 # 질문 4
-answer_4 = st.text_area("4. 여러분이 판매현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.")
+answer_4 = st.text_area("4. 여러분이 등록현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.")
