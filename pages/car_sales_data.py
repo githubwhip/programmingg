@@ -17,7 +17,7 @@ plt.rcParams['font.family'] = 'Malgun Gothic'
 
 #로그인 상태 확인
 if not st.session_state.get("authenticated", False):
-    st.warning("로그인이 필요합니다. [로그인 페이지로 돌아가기](./)")
+    st.warning("접속 확인이 필요합니다. [main 페이지로 돌아가서 선생님 성함과 비밀번호를 입력하고 다시 방문해 주세요.](./)")
     st.stop()
 
 
