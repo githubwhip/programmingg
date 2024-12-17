@@ -5,3 +5,4 @@ setuptools
 xlsxwriter
 folium
 streamlit-folium
+streamlit-extras
