@@ -192,5 +192,5 @@ with st.container():
             )
 
     # 페이지 이동 버튼
-  if st.button("📊 계속 학습하러 가기"):
+     if st.button("📊 계속 학습하러 가기"):
         st.switch_page("pages/car_sales_data.py")
