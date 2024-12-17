@@ -35,6 +35,7 @@ coordinates = {
     "세종": [36.4801, 127.2890],
     "강원": [37.8228, 128.1555],
     "제주": [33.4996, 126.5312],
+    "전국": [36.5, 127.5]  # 전국 평균 좌표
 }
 
 # 지도 생성 함수
@@ -44,18 +45,23 @@ def create_map(column, title, color="blue"):
 
     for idx, row in df.iterrows():
         region = row["구분"]
+        if region == "전국":  # 전국 데이터는 지도에서 제외
+            continue
+
         count = row[column]
-        lat, lon = coordinates[region]
-        folium.CircleMarker(
-            location=[lat, lon],
-            radius=count / 10000,  # 마커 크기 조정
-            color=color,
-            fill=True,
-            fill_opacity=0.6,
-            popup=f"{region}: {count:,}대"
-        ).add_to(marker_cluster)
+        lat, lon = coordinates.get(region, (None, None))
+        if lat and lon:  # 좌표가 존재할 때만 표시
+            folium.CircleMarker(
+                location=[lat, lon],
+                radius=count / 10000,  # 마커 크기 조정
+                color=color,
+                fill=True,
+                fill_opacity=0.6,
+                popup=f"{region}: {count:,}대"
+            ).add_to(marker_cluster)
 
     return m
+
 
 # Streamlit 앱 시작
 st.title("전기차 및 충전기 현황 시각화")
