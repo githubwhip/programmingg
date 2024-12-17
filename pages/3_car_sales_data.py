@@ -44,7 +44,20 @@ enroll_num = preprocess_data(load_data("salesnum.csv"), "판매 대수")
 enroll_per = preprocess_data(load_data("salesper.csv"), "판매 비중")  # 등록 비중 데이터 추가
 
 # Streamlit 애플리케이션 시작
-st.title("차종별 연도별 판매 현황")
+st.image("car2.png")
+
+st.markdown(
+    """
+    <div style="margin: 20px 0;">
+        <h4>🚗 차종별 연도별 판매 현황을 살펴보세요!</h4>
+        <p>좌측 그래프에서 <strong>판매 대수의 변화</strong>를 확인하고,</p>
+        <p>우측 그래프에서는 각 연도별 <strong>판매 비중</strong>을 비교해 보세요! 🎯</p>
+        <p>판매 트렌드를 파악하면 어떤 차종이 인기인지 알 수 있을 거예요! 📊✨</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 
 # 사용자 입력: 차종 선택
 # 사용자 입력: 차종 선택
