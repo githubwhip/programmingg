@@ -15,9 +15,6 @@ correct_answers = {
     "겨울 충전 이유": "배터리 성능 저하"
 }
 
-# 학번과 이름 입력 받기
-answer_0 = st.text_input("👩‍🎓 1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
-
 # 페이지 제목
 st.image("car4.png")
 st.markdown(
