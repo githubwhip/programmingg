@@ -70,11 +70,11 @@ def plot_percentage_trend(data, vehicle_type):
 st.image("car.png")
 st.markdown(
     """
-    <h4 style="margin-top: 40px; margin-bottom: 50px;">🚗 <b>차종을 골라볼까요?</b> 🚗✨</h4>
+    <h4 style="margin-top: 40px; margin-bottom: 20px;">🚗 <b>차종을 골라볼까요?</b> 🚗✨</h4>
     <p>여러분이 궁금한 차종을 골라 <b>연도별 등록 대수</b>를 한눈에 확인해 보세요! 🧐</p>
     <p>오른쪽 차트에서는 <i>차종의 연도별 등록 비중</i>도 함께 볼 수 있어요! 🔍</p>
     <p><b>어느 차종이 가장 인기가 많을까요?</b> 🎯</p>
-    <p style="margin-top: 15px;">그럼 시작해볼까요? 🍀🚗</p>
+    <p style="margin-top: 45px;">그럼 시작해볼까요? 🍀🚗</p>
     """,
     unsafe_allow_html=True
 )
