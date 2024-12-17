@@ -120,7 +120,7 @@ def create_map2(column, color="blue"):
 
 
 # Streamlit 레이아웃
-st.title("지역별 전기차 등록 현황 및 충전기 설치 현황 알아보기")
+st.header("지역별 전기차 등록 현황 및 충전기 설치 현황 알아보기")
 
 # 페이지 나누기
 left_col, right_col = st.columns([2, 1])
