@@ -48,7 +48,7 @@ def create_map(column, title, color="blue"):
         lat, lon = coordinates[region]
         folium.CircleMarker(
             location=[lat, lon],
-            radius=count / 1000,  # 마커 크기 조정
+            radius=count / 10000,  # 마커 크기 조정
             color=color,
             fill=True,
             fill_opacity=0.6,
