@@ -39,7 +39,8 @@ answers = {}
 # 탭 1: 시간대별 충전 전력량
 with tab1:
     st.image("충전기당시간대별평균충전전력량.png", use_container_width=True)
-    st.subheader("🔌 시간대별 충전 전력량 분석")
+
+    st.image("expert.png")
     answers["급속 충전 시간대"] = st.selectbox(
         "1. 급속 충전이 주로 많이 사용되는 시간대는 언제인가요? ⏰",
         ["선택하세요", "오전 (6-12시)", "오후 (12-18시)", "저녁 (18-24시)", "새벽 (0-6시)"]
@@ -52,7 +53,7 @@ with tab1:
 # 탭 2: 설치 장소별 이용 현황
 with tab2:
     st.image("충전기당설치장소별월평균이용현황.png", use_container_width=True)
-    st.subheader("🏝️ 설치 장소별 이용 현황 분석")
+    st.image("expert.png")
     answers["완속 충전기 설치 장소"] = st.selectbox(
         "3. 어느 장소에서 완속 충전기가 가장 많이 사용되나요? 🏠",
         ["선택하세요", "공공시설", "차량정비시설", "휴게소", "기타시설"]
@@ -65,7 +66,7 @@ with tab2:
 # 탭 3: 계절별 이용 현황
 with tab3:
     st.image("충전기당계절별월평균이용현황.png", use_container_width=True)
-    st.subheader("🍃 계절별 이용 현황 분석")
+    st.image("expert.png")
     answers["급속 충전기 사용 계절"] = st.selectbox(
         "5. 급속 충전기가 가장 많이 이용되는 계절은 언제인가요? 🌞",
         ["선택하세요", "봄", "여름", "가을", "겨울"]
