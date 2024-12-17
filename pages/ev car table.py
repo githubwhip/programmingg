@@ -216,6 +216,7 @@ if st.button("📝 답변 파일 생성하기"):
 
         excel_data = download_answers(data_to_save)
         st.success("✅ 파일이 성공적으로 생성되었습니다!")
+        st.balloons()  # 폭죽 효과 출력
         st.download_button(
             label="📂 답변 엑셀 파일 다운로드",
             data=excel_data,
@@ -225,4 +226,4 @@ if st.button("📝 답변 파일 생성하기"):
 
 # 페이지 이동 버튼
 if st.button("📊 계속 학습하러 가기"):
-    st.success("새로운 페이지로 이동합니다! 🚀")
+    st.switch_page("pages/QnA about evcar.py")
