@@ -71,7 +71,7 @@ st.image("car.png")
 
 st.markdown(
     """
-    <div style="margin: 20px 0;">
+    <div style="margin: 40px 0;">
         <h4>🔍 차종을 선택해보세요!</h4>
         <p>궁금한 연도별 등록 대수를 살펴볼 수 있어요.</p>
         <p>오른쪽 차트에서는 <strong>등록 비중</strong>도 확인할 수 있답니다! 🎯</p>
