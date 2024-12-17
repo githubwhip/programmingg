@@ -3,7 +3,7 @@ import pandas as pd
 import folium
 from streamlit_folium import st_folium
 
-# 데이터 준비
+# 기존 데이터 준비
 data = {
     "구분": ["서울", "경기", "인천", "경북", "경남", "부산", "대구", "울산", "전북", "전남", 
             "광주", "충북", "충남", "대전", "세종", "강원", "제주", "전국"],
@@ -14,6 +14,20 @@ data = {
 }
 
 df = pd.DataFrame(data)
+
+# 이미지 데이터 준비 (새로운 표)
+data_image = {
+    "구분": ["수도권", "서울", "경기", "인천", "경상권", "경북", "경남", "부산", "대구", "울산",
+            "전라권", "전북", "전남", "광주", "충청권", "충북", "충남", "대전", "세종", "강원", "제주", "전국"],
+    "충전기(종합)": [94804, 34602, 50663, 9539, 46358, 9608, 11097, 11307, 11093, 3253, 
+                   17906, 6495, 5734, 5677, 22704, 6558, 7825, 5721, 2600, 6437, 5872, 194081],
+    "급속": [6823, 2255, 3701, 867, 5285, 1781, 1359, 652, 999, 494,
+            2742, 1070, 1162, 510, 2817, 905, 1101, 593, 218, 1176, 1798, 20641],
+    "완속": [87881, 32437, 46962, 8672, 41073, 7827, 9738, 10655, 10094, 2759,
+            15164, 5425, 4572, 5167, 19887, 5653, 6724, 5128, 2382, 5261, 4074, 173440]
+}
+
+df_image = pd.DataFrame(data_image)
 
 # 지역 좌표 설정
 coordinates = {
@@ -38,7 +52,7 @@ coordinates = {
 }
 
 # 지도 생성 함수
-def create_map1(column, color="blue"):
+def create_map(column, color="blue"):
     m = folium.Map(location=[36.5, 127.5], zoom_start=7)
 
     for idx, row in df.iterrows():
@@ -60,50 +74,34 @@ def create_map1(column, color="blue"):
 
     return m
 
-def create_map2(column, color="blue"):
-    m = folium.Map(location=[36.5, 127.5], zoom_start=7)
-
-    for idx, row in df.iterrows():
-        region = row["구분"]
-        if region == "전국":  # 전국 데이터 제외
-            continue
-
-        count = row[column]
-        lat, lon = coordinates.get(region, (None, None))
-        if lat and lon:
-            folium.CircleMarker(
-                location=[lat, lon],
-                radius=count / 2000,
-                color=color,
-                fill=True,
-                fill_opacity=0.6,
-                popup=f"{region}: {count:,}대"
-            ).add_to(m)
-
-    return m
-
 # Streamlit 레이아웃
 st.title("전기차 및 충전기 현황 시각화")
-st.write("왼쪽에는 지도 시각화, 오른쪽에는 테이블 데이터가 표시됩니다.")
 
-# 페이지를 왼쪽과 오른쪽으로 나누기
+# 페이지 나누기
 left_col, right_col = st.columns([2, 1])
 
-# 왼쪽 부분 (탭을 활용해 지도 표시)
+# 왼쪽 부분 (탭 2개로 지도 표시)
 with left_col:
     tab1, tab2 = st.tabs(["전기차 지도", "충전기 지도"])
 
     with tab1:
-        st.subheader("전기차 지도")
-        ev_map = create_map1("전기차(대)", color="blue")
+        st.subheader("전기차 등록 현황 지도")
+        ev_map = create_map("전기차(대)", color="blue")
         st_folium(ev_map, width=700, height=500)
 
     with tab2:
-        st.subheader("충전기 지도")
-        charger_map = create_map2("충전기(합계)", color="green")
+        st.subheader("충전기 설치 현황 지도")
+        charger_map = create_map("충전기(합계)", color="green")
         st_folium(charger_map, width=700, height=500)
 
-# 오른쪽 부분 (인터랙티브 테이블)
+# 오른쪽 부분 (탭 2개로 테이블 표시)
 with right_col:
-    st.subheader("전기차 및 충전기 데이터")
-    st.dataframe(df.set_index("구분"), use_container_width=True)
+    table_tab1, table_tab2 = st.tabs(["전기차/충전기 테이블", "새로운 충전기 테이블"])
+
+    with table_tab1:
+        st.subheader("기존 데이터 테이블")
+        st.dataframe(df.set_index("구분"), use_container_width=True)
+
+    with table_tab2:
+        st.subheader("새로운 충전기 데이터")
+        st.dataframe(df_image.set_index("구분"), use_container_width=True)
