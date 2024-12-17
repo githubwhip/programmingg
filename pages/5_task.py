@@ -19,7 +19,20 @@ correct_answers = {
 answer_0 = st.text_input("👩‍🎓 1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
 
 # 페이지 제목
-st.header("🔋 전기차 충전기 사용 실태 현황 분석 표 📊")
+st.image("car4.png")
+st.markdown(
+    """
+    <div style="margin: 20px 0; padding: 10px;">
+        <h4>🔋 **전기차 충전기 사용 실태를 분석해볼까요?** 🚗✨</h4>
+        <p>여러분은 <strong>전기차 충전</strong>에 대해 얼마나 알고 있나요? 🧐</p>
+        <p>지금부터 <em>시간대별 충전 전력량</em>, <em>설치 장소별 이용 현황</em>, 그리고 <em>계절별 이용 현황</em>에 대한 문제를 풀어보세요! 📊</p>
+
+        <p>총 6개의 문제가 준비되어 있어요! 🔍</p>
+        <p style="margin-top: 15px;">그럼 시작해볼까요? **행운을 빌어요!** 🍀🚗</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # 탭 구성
 tabs = ["⏰ 시간대별 충전 전력량", "📍 설치 장소별 이용 현황", "🍂 계절별 이용 현황"]
