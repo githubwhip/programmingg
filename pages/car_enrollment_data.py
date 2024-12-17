@@ -120,7 +120,6 @@ def download_answers(answers):
     return output.getvalue()
 
 import json
-
 if st.button("답변 파일 생성하기"):
     data_to_save = {
         "1. 학번": answer_1,
@@ -131,10 +130,14 @@ if st.button("답변 파일 생성하기"):
     }
     
     excel_data = download_answers(data_to_save)
-    st.balloons()
-    st.download_button(label="답변 엑셀 파일 다운로드",
-                       data=excel_data,
-                       file_name="answers.xlsx",
-                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-if st.button("계속 학습하러 가기"):
-    st.switch_page("pages/car_sales_data.py")
+    
+    # 폭죽 효과 출력
+    st.balloons()  # Streamlit 내장 폭죽 효과
+    
+    # 엑셀 파일 다운로드 버튼
+    st.download_button(
+        label="답변 엑셀 파일 다운로드",
+        data=excel_data,
+        file_name="answers.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
