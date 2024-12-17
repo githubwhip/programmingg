@@ -113,7 +113,7 @@ import pandas as pd
 from io import BytesIO
 
 # 페이지 헤더
-st.header("🚗 학습지 작성하기")
+st.image("sheet.png")
 
 # 전체 컨테이너 시작 (스크롤 지원)
 with st.container():
