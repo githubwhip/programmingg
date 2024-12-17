@@ -133,7 +133,8 @@ import pandas as pd
 from io import BytesIO
 
 # 페이지 헤더
-st.header("🚗 학습지 작성하기")
+
+st.image("memo.png")
 
 # 학번과 이름 입력
 answer_0 = st.text_input("✏️ 1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
