@@ -191,6 +191,5 @@ with st.container():
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
 
-    # 페이지 이동 버튼
-     if st.button("📊 계속 학습하러 가기"):
-        st.switch_page("pages/car_sales_data.py")
+if st.button("📊 계속 학습하러 가기"):
+    st.switch_page("pages/car_sales_data.py")
