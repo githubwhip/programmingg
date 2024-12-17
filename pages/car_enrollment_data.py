@@ -154,7 +154,7 @@ with st.container():
 
     # 질문 5: 자유 서술
     answer_5 = add_question(
-        icon="📝", 
+        icon="🚀", 
         title="연도별 현황 조작 후 느낀 점",
         question="여러분이 연도별 차종 등록 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.",
         input_type="textarea"
@@ -182,6 +182,7 @@ with st.container():
             }
 
             excel_data = download_answers(data_to_save)
+            st.success("✅ 파일이 성공적으로 생성되었습니다!")
             st.balloons()  # 폭죽 효과 출력
             st.download_button(
                 label="📂 답변 엑셀 파일 다운로드",
@@ -193,4 +194,3 @@ with st.container():
     # 페이지 이동 버튼
     if st.button("📊 계속 학습하러 가기"):
         st.success("🚀 새로운 페이지로 이동합니다! 실제 이동은 구현된 환경에서 가능합니다.")
-
