@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import st_folium
-from folium.plugins import MarkerCluster
 
 # 데이터 준비
 data = {
@@ -16,7 +15,7 @@ data = {
 
 df = pd.DataFrame(data)
 
-# 지역 좌표 설정 (위도와 경도)
+# 지역 좌표 설정
 coordinates = {
     "서울": [37.5665, 126.9780],
     "경기": [37.4138, 127.5183],
@@ -35,24 +34,24 @@ coordinates = {
     "세종": [36.4801, 127.2890],
     "강원": [37.8228, 128.1555],
     "제주": [33.4996, 126.5312],
-    "전국": [36.5, 127.5]  # 전국 평균 좌표
+    "전국": [36.5, 127.5]
 }
 
 # 지도 생성 함수
-def create_map(column, title, color="blue"):
+def create_map(column, color="blue"):
     m = folium.Map(location=[36.5, 127.5], zoom_start=7)
 
     for idx, row in df.iterrows():
         region = row["구분"]
-        if region == "전국":  # 전국 데이터는 표시하지 않음
+        if region == "전국":  # 전국 데이터 제외
             continue
 
         count = row[column]
         lat, lon = coordinates.get(region, (None, None))
-        if lat and lon:  # 좌표가 존재할 때만 표시
+        if lat and lon:
             folium.CircleMarker(
                 location=[lat, lon],
-                radius=count / 2500,  # 마커 크기 조정
+                radius=count / 2500,
                 color=color,
                 fill=True,
                 fill_opacity=0.6,
@@ -61,28 +60,28 @@ def create_map(column, title, color="blue"):
 
     return m
 
-
-# Streamlit 앱 시작
+# Streamlit 레이아웃
 st.title("전기차 및 충전기 현황 시각화")
-st.write("탭을 선택해 전기차 및 충전기 현황을 확인하세요.")
+st.write("왼쪽에는 지도 시각화, 오른쪽에는 테이블 데이터가 표시됩니다.")
 
-# 탭 설정
-tab1, tab2 = st.tabs(["전기차 현황", "충전기 현황"])
+# 페이지를 왼쪽과 오른쪽으로 나누기
+left_col, right_col = st.columns([2, 1])
 
-# 탭1: 전기차 지도 및 표
-with tab1:
-    st.subheader("전기차 등록 현황 지도")
-    ev_map = create_map("전기차(대)", "전기차 등록 현황", color="blue")
-    st_folium(ev_map, width=800, height=500)
+# 왼쪽 부분 (탭을 활용해 지도 표시)
+with left_col:
+    tab1, tab2 = st.tabs(["전기차 지도", "충전기 지도"])
 
-    st.subheader("전기차 등록 데이터")
-    st.dataframe(df.set_index("구분"), use_container_width = True)
+    with tab1:
+        st.subheader("전기차 등록 현황 지도")
+        ev_map = create_map("전기차(대)", color="blue")
+        st_folium(ev_map, width=700, height=500)
 
-# 탭2: 충전기 지도 및 표
-with tab2:
-    st.subheader("충전기 설치 현황 지도")
-    charger_map = create_map("충전기(합계)", "충전기 설치 현황", color="green")
-    st_data = st_folium(charger_map, width=800, height=500)
+    with tab2:
+        st.subheader("충전기 설치 현황 지도")
+        charger_map = create_map("충전기(합계)", color="green")
+        st_folium(charger_map, width=700, height=500)
 
-    st.subheader("충전기 설치 데이터")
-    st.dataframe(df_charging.set_index("구분")[["충전기(대)"]], use_container_width=True)
+# 오른쪽 부분 (인터랙티브 테이블)
+with right_col:
+    st.subheader("전기차 및 충전기 데이터")
+    st.dataframe(df.set_index("구분"), use_container_width=True)
