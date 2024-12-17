@@ -121,7 +121,7 @@ with st.container():
             elif input_type == "textarea":
                 return st.text_area(question)
             elif input_type == "select":
-                return st.selectbox(question, ["선택하세요"] + ["100,000 단위", "50,000 단위", "1만 단위"])
+                return st.selectbox(question, ["선택하세요"] + ["50만 단위", "10만 단위", "5만 단위", "1만 단위"])
             elif input_type == "slider":
                 return st.slider(question, min_value=0, max_value=10, step=1)
         return None
