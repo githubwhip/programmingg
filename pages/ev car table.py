@@ -155,42 +155,48 @@ import pandas as pd
 from io import BytesIO
 import streamlit as st
 
-# 학습지 섹션
-st.header("학습지")
+import streamlit as st
+import pandas as pd
+from io import BytesIO
 
-# 학번과 이름을 입력 받는 부분
-answer_1 = st.text_input("1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
+# 페이지 헤더
+st.header("🚗 학습지 작성하기")
 
-# 각 질문을 `st.expander`로 감싸서 접고 펼칠 수 있도록 합니다.
-with st.expander("2. 전기차 등록 지역"):
-    answer_2 = st.text_area(
-        "전기차를 가장 많이 등록된 상위 5개 지역, 하위 5개 지역을 적어보세요. "
-        "(예: 서울, 부산, 대구, 등)"
-    )
+# 전체 스크롤 가능 컨테이너
+with st.container():
+    # 학번과 이름을 입력 받는 부분
+    answer_1 = st.text_input("1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
 
-with st.expander("3. 충전기 설치 지역"):
-    answer_3 = st.text_area(
-        "충전기가 가장 많이 설치된 상위 5개 지역, 하위 5개 지역을 적어보세요. "
-        "(예: 서울, 인천, 대전, 등)"
-    )
+    # 각 질문을 `st.expander`로 감싸기
+    with st.expander("2. 전기차 등록 지역"):
+        answer_2 = st.text_area(
+            "전기차를 가장 많이 등록된 상위 5개 지역, 하위 5개 지역을 적어보세요. "
+            "(예: 서울, 부산, 대구, 등)"
+        )
 
-with st.expander("4. 급속 충전기 설치 지역"):
-    answer_4 = st.text_area(
-        "급속 충전기가 가장 많이 설치된 상위 5개 지역, 하위 5개 지역을 적어보세요. "
-        "(예: 서울, 부산, 대구, 등)"
-    )
+    with st.expander("3. 충전기 설치 지역"):
+        answer_3 = st.text_area(
+            "충전기가 가장 많이 설치된 상위 5개 지역, 하위 5개 지역을 적어보세요. "
+            "(예: 서울, 인천, 대전, 등)"
+        )
 
-with st.expander("5. 완속 충전기 설치 지역"):
-    answer_5 = st.text_area(
-        "완속 충전기가 가장 많이 설치된 상위 5개 지역, 하위 5개 지역을 적어보세요. "
-        "(예: 서울, 대전, 경기도, 등)"
-    )
+    with st.expander("4. 급속 충전기 설치 지역"):
+        answer_4 = st.text_area(
+            "급속 충전기가 가장 많이 설치된 상위 5개 지역, 하위 5개 지역을 적어보세요. "
+            "(예: 서울, 부산, 대구, 등)"
+        )
 
-with st.expander("6. 전기차와 충전기 간의 인과 관계"):
-    answer_6 = st.text_input(
-        "전기차와 충전기(합계, 급속, 완속) 간의 인과 관계를 나타내는 문장을 1개 적어보세요. "
-        "(예: 전기차가 있는 서울에는 완속 충전기가 많이 설치되어 있다.)"
-    )
+    with st.expander("5. 완속 충전기 설치 지역"):
+        answer_5 = st.text_area(
+            "완속 충전기가 가장 많이 설치된 상위 5개 지역, 하위 5개 지역을 적어보세요. "
+            "(예: 서울, 대전, 경기도, 등)"
+        )
+
+    with st.expander("6. 전기차와 충전기 간의 인과 관계"):
+        answer_6 = st.text_input(
+            "전기차와 충전기(합계, 급속, 완속) 간의 인과 관계를 나타내는 문장을 1개 적어보세요. "
+            "(예: 전기차가 있는 서울에는 완속 충전기가 많이 설치되어 있다.)"
+        )
 
 # 답변을 모아 엑셀 파일로 저장 및 다운로드
 def download_answers(answers):
@@ -200,21 +206,26 @@ def download_answers(answers):
         df.to_excel(writer, index=False, sheet_name="Answers")
     return output.getvalue()
 
-if st.button("답변 파일 생성하기"):
-    data_to_save = {
-        "1. 학번": answer_1,
-        "2. 전기차 등록 지역": answer_2,
-        "3. 충전기 설치 지역": answer_3,
-        "4. 급속 충전기 설치 지역": answer_4,
-        "5. 완속 충전기 설치 지역": answer_5,
-        "6. 전기차와 충전기 간의 인과 관계": answer_6,
-    }
-    
-    excel_data = download_answers(data_to_save)
-    st.balloons()  # 폭죽 효과 출력
-    st.download_button(
-        label="답변 엑셀 파일 다운로드",
-        data=excel_data,
-        file_name="answers.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+# 버튼을 사용해 파일 생성 및 다운로드
+if st.button("📝 답변 파일 생성하기"):
+    # 데이터 확인 및 저장
+    if not answer_1:
+        st.warning("학번과 이름을 입력하세요!")
+    else:
+        data_to_save = {
+            "1. 학번": answer_1,
+            "2. 전기차 등록 지역": answer_2,
+            "3. 충전기 설치 지역": answer_3,
+            "4. 급속 충전기 설치 지역": answer_4,
+            "5. 완속 충전기 설치 지역": answer_5,
+            "6. 전기차와 충전기 간의 인과 관계": answer_6,
+        }
+        
+        excel_data = download_answers(data_to_save)
+        st.balloons()  # 폭죽 효과 출력
+        st.download_button(
+            label="📂 답변 엑셀 파일 다운로드",
+            data=excel_data,
+            file_name="answers.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
