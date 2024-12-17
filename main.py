@@ -3,7 +3,18 @@ import pandas as pd
 import time
 
 FONT_PATH = "fonts/malgun.ttf"
-
+FONT_CSS = f"""
+<style>
+    @font-face {{
+        font-family: 'Malgun Gothic';
+        src: url('{FONT_PATH}');
+    }}
+    html, body, [class*="st-"] {{
+        font-family: 'Malgun Gothic', sans-serif;
+    }}
+</style>
+"""
+st.markdown(FONT_CSS, unsafe_allow_html=True)
 # 이미지 출력
 st.image('image.png')
 
