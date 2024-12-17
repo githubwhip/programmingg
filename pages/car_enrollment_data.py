@@ -5,7 +5,6 @@ import random
 import koreanize_matplotlib
 from matplotlib import font_manager, rc
 from io import BytesIO
-from streamlit_extras.animate_button import animate_button
 import time
 
 # 폰트 설정
@@ -14,12 +13,11 @@ font_manager.fontManager.addfont(font_path)
 rc('font', family='Malgun Gothic')
 plt.rcParams['font.family'] = 'Malgun Gothic'
 
-#로그인 상태 확인
+# 로그인 상태 확인
 if not st.session_state.get("authenticated", False):
     st.warning("접속 확인이 필요합니다. [main 페이지로 돌아가서 선생님 성함과 비밀번호를 입력하고 다시 방문해 주세요.](./)")
     st.stop()
 
-    
 # 데이터 로드 및 전처리 함수
 @st.cache_data
 def load_data(file_name):
@@ -119,7 +117,6 @@ def download_answers(answers):
         df.to_excel(writer, index=False, sheet_name="Answers")
     return output.getvalue()
 
-import json
 if st.button("답변 파일 생성하기"):
     data_to_save = {
         "1. 학번": answer_1,
@@ -130,14 +127,13 @@ if st.button("답변 파일 생성하기"):
     }
     
     excel_data = download_answers(data_to_save)
-    
-    # 폭죽 효과 출력
-    st.balloons()  # Streamlit 내장 폭죽 효과
-    
-    # 엑셀 파일 다운로드 버튼
+    st.balloons()  # 폭죽 효과 출력
     st.download_button(
         label="답변 엑셀 파일 다운로드",
         data=excel_data,
         file_name="answers.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
+
+if st.button("계속 학습하러 가기"):
+    st.switch_page("pages/car_sales_data.py")
