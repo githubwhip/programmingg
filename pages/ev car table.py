@@ -60,7 +60,6 @@ with col1:
 with col2:
     st.image('map.png', caption="지역별 지도")
 
-
 import streamlit as st
 import pandas as pd
 import folium
@@ -104,16 +103,13 @@ for region in data.itertuples():
     total = region.종합
     coord = coordinates[name]
     
+    # 원 마커 추가
     folium.CircleMarker(
         location=coord,
-        radius=total / 5000, # 종합 값에 비례한 크기 조정
+        radius=total / 3000, # 종합 값에 비례한 크기 조정 (더 큰 원)
         color="blue",
         fill=True,
         fill_color="blue",
         fill_opacity=0.6,
         tooltip=f"{name}: {total}"
     ).add_to(m)
-
-# Streamlit에서 지도 표시
-st.title("지역별 전기차 충전기 분포")
-st_data = st_folium(m, width=700)
