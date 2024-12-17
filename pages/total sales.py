@@ -24,7 +24,7 @@ def main():
     page_title="DirChat",
     page_icon=":books:")
 
-    st.markdown("<h1 style='text-align:center;'>_무엇이든 물어보살 :red[전기차] :electric_car:_</h1>", unsafe_allow_html=True)
+    st.title("_무엇이든 물어보살 :red[전기차]_ :electic:")
 
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
