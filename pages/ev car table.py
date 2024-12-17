@@ -139,7 +139,7 @@ with left_col:
 
 # 오른쪽 부분 (탭 2개로 테이블 표시)
 with right_col:
-    table_tab1, table_tab2 = st.tabs(["지역별 전기차/충전기 현황", "지역별 급속/완속 충전기 현황"])
+    table_tab1, table_tab2 = st.tabs(["전기차/충전기", "급속/완속 충전기"])
 
     with table_tab1:
         st.dataframe(df.set_index("구분"), use_container_width=True)
