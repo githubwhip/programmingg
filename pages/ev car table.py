@@ -73,7 +73,7 @@ def create_map2(column, color="blue"):
         if lat and lon:
             folium.CircleMarker(
                 location=[lat, lon],
-                radius=count / 1000,
+                radius=count / 2000,
                 color=color,
                 fill=True,
                 fill_opacity=0.6,
