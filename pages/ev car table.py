@@ -53,7 +53,7 @@ def create_map(column, title, color="blue"):
         if lat and lon:  # 좌표가 존재할 때만 표시
             folium.CircleMarker(
                 location=[lat, lon],
-                radius=count / 10000,  # 마커 크기 조정
+                radius=count / 1000,  # 마커 크기 조정
                 color=color,
                 fill=True,
                 fill_opacity=0.6,
