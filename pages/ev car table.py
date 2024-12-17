@@ -73,11 +73,10 @@ tab1, tab2 = st.tabs(["전기차 현황", "충전기 현황"])
 with tab1:
     st.subheader("전기차 등록 현황 지도")
     ev_map = create_map("전기차(대)", "전기차 등록 현황", color="blue")
-    st_data = st_folium(ev_map, width=800, height=500)
+    st_folium(ev_map, width=800, height=500)
 
-    st.subheader("전기차 등록 현황 표")
-    transposed_ev_df = df[["구분", "전기차(대)"]].set_index("구분").T  # 행과 열을 전환
-    st.table(transposed_ev_df)
+    st.subheader("전기차 등록 데이터")
+    st.dataframe(df.set_index("구분"), use_container_width = True)
 
 # 탭2: 충전기 지도 및 표
 with tab2:
@@ -85,6 +84,5 @@ with tab2:
     charger_map = create_map("충전기(합계)", "충전기 설치 현황", color="green")
     st_data = st_folium(charger_map, width=800, height=500)
 
-    st.subheader("충전기 설치 현황 표")
-    transposed_charger_df = df[["구분", "충전기(합계)"]].set_index("구분").T  # 행과 열을 전환
-    st.table(transposed_charger_df)
+    st.subheader("충전기 설치 데이터")
+    st.dataframe(df_charging.set_index("구분")[["충전기(대)"]], use_container_width=True)
