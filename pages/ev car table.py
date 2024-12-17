@@ -38,7 +38,7 @@ coordinates = {
 }
 
 # 지도 생성 함수
-def create_map(column, color="blue"):
+def create_map1(column, color="blue"):
     m = folium.Map(location=[36.5, 127.5], zoom_start=7)
 
     for idx, row in df.iterrows():
@@ -60,6 +60,28 @@ def create_map(column, color="blue"):
 
     return m
 
+def create_map2(column, color="blue"):
+    m = folium.Map(location=[36.5, 127.5], zoom_start=7)
+
+    for idx, row in df.iterrows():
+        region = row["구분"]
+        if region == "전국":  # 전국 데이터 제외
+            continue
+
+        count = row[column]
+        lat, lon = coordinates.get(region, (None, None))
+        if lat and lon:
+            folium.CircleMarker(
+                location=[lat, lon],
+                radius=count / 1000,
+                color=color,
+                fill=True,
+                fill_opacity=0.6,
+                popup=f"{region}: {count:,}대"
+            ).add_to(m)
+
+    return m
+
 # Streamlit 레이아웃
 st.title("전기차 및 충전기 현황 시각화")
 st.write("왼쪽에는 지도 시각화, 오른쪽에는 테이블 데이터가 표시됩니다.")
@@ -72,13 +94,13 @@ with left_col:
     tab1, tab2 = st.tabs(["전기차 지도", "충전기 지도"])
 
     with tab1:
-        st.subheader("전기차 등록 현황 지도")
-        ev_map = create_map("전기차(대)", color="blue")
+        st.subheader("전기차 지도")
+        ev_map = create_map1("전기차(대)", color="blue")
         st_folium(ev_map, width=700, height=500)
 
     with tab2:
-        st.subheader("충전기 설치 현황 지도")
-        charger_map = create_map("충전기(합계)", color="green")
+        st.subheader("충전기 지도")
+        charger_map = create_map2("충전기(합계)", color="green")
         st_folium(charger_map, width=700, height=500)
 
 # 오른쪽 부분 (인터랙티브 테이블)
