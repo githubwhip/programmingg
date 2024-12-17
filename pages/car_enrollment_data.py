@@ -5,6 +5,7 @@ import random
 import koreanize_matplotlib
 from matplotlib import font_manager, rc
 from io import BytesIO
+from streamlit_extras.animate_button import animate_button
 import time
 
 # 폰트 설정
@@ -120,7 +121,7 @@ def download_answers(answers):
 
 import json
 
-if st.button("답변 파일 다운로드"):
+if st.button("답변 파일 생성하기"):
     data_to_save = {
         "1. 학번": answer_1,
         "2. 하이브리드 차 관련 질문": answer_2,
@@ -130,6 +131,7 @@ if st.button("답변 파일 다운로드"):
     }
     
     excel_data = download_answers(data_to_save)
+    st.balloons()
     st.download_button(label="답변 엑셀 파일 다운로드",
                        data=excel_data,
                        file_name="answers.xlsx",
