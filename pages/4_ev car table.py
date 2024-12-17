@@ -124,7 +124,18 @@ def create_map2(column, color="blue"):
 
 
 # Streamlit 레이아웃
-st.header("지역별 전기차 등록 현황 및 충전기 설치 현황")
+st.image("car3.png")
+st.markdown(
+    """
+    <div style="margin: 50px 0; padding: 10px;">
+        <h4>⚡ 전기차 등록 현황과 충전소를 한눈에! 🔍</h4>
+        <p>지금 <strong>어디에 전기차가 많이 등록</strong>되어 있는지 궁금하지 않으신가요? 🗺️</p>
+        <p>아래 지도에서 지역별 전기차 등록 현황을 확인하고,</p>
+        <p><strong>충전소 설치 현황</strong>도 함께 살펴보세요! 🛠️🔋</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # 페이지 나누기
 left_col, right_col = st.columns([2, 1])
