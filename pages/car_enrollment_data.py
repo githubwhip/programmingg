@@ -96,6 +96,10 @@ import streamlit as st
 import pandas as pd
 from io import BytesIO
 
+import streamlit as st
+import pandas as pd
+from io import BytesIO
+
 # 페이지 헤더
 st.header("🚗 학습지 작성하기")
 
@@ -111,7 +115,7 @@ with st.container():
         """
         with st.expander(f"{icon} {title}"):
             if image:
-                st.image(image, use_column_width=True)
+                st.image(image, use_container_width=True)  # Updated parameter
             if input_type == "text":
                 return st.text_input(question)
             elif input_type == "textarea":
@@ -189,3 +193,4 @@ with st.container():
     # 페이지 이동 버튼
     if st.button("📊 계속 학습하러 가기"):
         st.success("🚀 새로운 페이지로 이동합니다! 실제 이동은 구현된 환경에서 가능합니다.")
+
