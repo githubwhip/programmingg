@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import time
 
+FONT_PATH = "fonts/malgun.ttf"
+
 # 이미지 출력
 st.image('image.png')
 
