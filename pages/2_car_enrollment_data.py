@@ -67,7 +67,7 @@ def plot_percentage_trend(data, vehicle_type):
     return fig
 
 # Streamlit 애플리케이션 시작
-st.img("car.png")
+st.image("car.png")
 
 # 사용자 입력: 차종 선택
 vehicle_types = enroll_num['구분'].unique()
