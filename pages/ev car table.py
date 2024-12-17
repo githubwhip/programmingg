@@ -41,11 +41,10 @@ coordinates = {
 # 지도 생성 함수
 def create_map(column, title, color="blue"):
     m = folium.Map(location=[36.5, 127.5], zoom_start=7)
-    marker_cluster = MarkerCluster().add_to(m)
 
     for idx, row in df.iterrows():
         region = row["구분"]
-        if region == "전국":  # 전국 데이터는 지도에서 제외
+        if region == "전국":  # 전국 데이터는 표시하지 않음
             continue
 
         count = row[column]
@@ -53,12 +52,12 @@ def create_map(column, title, color="blue"):
         if lat and lon:  # 좌표가 존재할 때만 표시
             folium.CircleMarker(
                 location=[lat, lon],
-                radius=count / 1000,  # 마커 크기 조정
+                radius=count / 5000,  # 마커 크기 조정
                 color=color,
                 fill=True,
                 fill_opacity=0.6,
                 popup=f"{region}: {count:,}대"
-            ).add_to(marker_cluster)
+            ).add_to(m)
 
     return m
 
