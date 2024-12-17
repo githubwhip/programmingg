@@ -31,12 +31,12 @@ answers = {}
 # 탭 1: 시간대별 충전 전력량
 with tab1:
     st.image("충전기당시간대별평균충전전력량.png", use_container_width=True)
-    st.subheader("🔌 탭 1) 시간대별 충전 전력량 분석")
-    answers["급속 시간대"] = st.selectbox(
+    st.subheader("🔌 시간대별 충전 전력량 분석")
+    answers["급속 충전 시간대"] = st.selectbox(
         "1. 급속 충전이 주로 많이 사용되는 시간대는 언제인가요? ⏰",
         ["선택하세요", "오전 (6-12시)", "오후 (12-18시)", "저녁 (18-24시)", "새벽 (0-6시)"]
     )
-    answers["완속 시간대"] = st.selectbox(
+    answers["완속 충전 시간대"] = st.selectbox(
         "2. 완속 충전 사용량이 증가하는 시간대는 언제인가요? 🌙",
         ["선택하세요", "오전 (6-12시)", "오후 (12-18시)", "저녁 (18-24시)", "새벽 (0-6시)"]
     )
@@ -44,12 +44,12 @@ with tab1:
 # 탭 2: 설치 장소별 이용 현황
 with tab2:
     st.image("충전기당설치장소별월평균이용현황.png", use_container_width=True)
-    st.subheader("🏝️ 탭 2) 설치 장소별 이용 현황 분석")
-    answers["완속 설치 장소"] = st.selectbox(
+    st.subheader("🏝️ 설치 장소별 이용 현황 분석")
+    answers["완속 충전기 설치 장소"] = st.selectbox(
         "3. 어느 장소에서 완속 충전기가 가장 많이 사용되나요? 🏠",
         ["선택하세요", "공공시설", "차량정비시설", "휴게소", "기타시설"]
     )
-    answers["급속 설치 장소"] = st.selectbox(
+    answers["급속 충전기 설치 장소"] = st.selectbox(
         "4. 급속 충전기는 주로 어떤 장소에 설치되나요? 🚗",
         ["선택하세요", "고속도로 휴게소", "상업시설", "주차시설", "공공주택시"]
     )
@@ -57,12 +57,12 @@ with tab2:
 # 탭 3: 계절별 이용 현황
 with tab3:
     st.image("충전기당계절별월평균이용현황.png", use_container_width=True)
-    st.subheader("🍃 탭 3) 계절별 이용 현황 분석")
-    answers["급속 계절"] = st.selectbox(
+    st.subheader("🍃 계절별 이용 현황 분석")
+    answers["급속 충전기 사용 계절"] = st.selectbox(
         "5. 급속 충전기가 가장 많이 이용되는 계절은 언제인가요? 🌞",
         ["선택하세요", "봄", "여름", "가을", "겨울"]
     )
-    answers["겨울 충전 이유"] = st.selectbox(
+    answers["겨울철 충전시간이 긴 이유"] = st.selectbox(
         "6. 겨울철 충전 시간이 더 긴 이유는 무엇인가요? ❄️",
         ["선택하세요", "배터리 성능 저하", "날씨가 추워 충전 효율이 높아짐", "사용량 감", "기타 이유"]
     )
