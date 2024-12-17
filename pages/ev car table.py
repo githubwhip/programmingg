@@ -35,7 +35,6 @@ coordinates = {
     "세종": [36.4801, 127.2890],
     "강원": [37.8228, 128.1555],
     "제주": [33.4996, 126.5312],
-    "전국": [36.5, 127.5]  # 전국 평균 좌표
 }
 
 # 지도 생성 함수
@@ -49,7 +48,7 @@ def create_map(column, title, color="blue"):
         lat, lon = coordinates[region]
         folium.CircleMarker(
             location=[lat, lon],
-            radius=count / 10000,  # 마커 크기 조정
+            radius=count / 1000,  # 마커 크기 조정
             color=color,
             fill=True,
             fill_opacity=0.6,
@@ -72,7 +71,8 @@ with tab1:
     st_data = st_folium(ev_map, width=800, height=500)
 
     st.subheader("전기차 등록 현황 표")
-    st.table(df[["구분", "전기차(대)"]])
+    transposed_ev_df = df[["구분", "전기차(대)"]].set_index("구분").T  # 행과 열을 전환
+    st.table(transposed_ev_df)
 
 # 탭2: 충전기 지도 및 표
 with tab2:
@@ -81,4 +81,5 @@ with tab2:
     st_data = st_folium(charger_map, width=800, height=500)
 
     st.subheader("충전기 설치 현황 표")
-    st.table(df[["구분", "충전기(합계)"]])
+    transposed_charger_df = df[["구분", "충전기(합계)"]].set_index("구분").T  # 행과 열을 전환
+    st.table(transposed_charger_df)
