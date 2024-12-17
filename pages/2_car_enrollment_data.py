@@ -69,6 +69,14 @@ def plot_percentage_trend(data, vehicle_type):
 # Streamlit 애플리케이션 시작
 st.image("car.png")
 
+st.markdown(
+    """
+    **🔍 차종을 선택해보세요!**  
+    궁금한 연도별 등록 대수를 살펴볼 수 있어요.  
+    오른쪽 차트에서는 **등록 비중**도 확인할 수 있답니다! 🎯  
+    """
+)
+
 # 사용자 입력: 차종 선택
 vehicle_types = enroll_num['구분'].unique()
 selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
