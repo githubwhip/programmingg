@@ -142,7 +142,7 @@ with right_col:
     table_tab1, table_tab2 = st.tabs(["전기차/충전기", "급속/완속 충전기"])
 
     with table_tab1:
-        st.dataframe(df.set_index("구분"), use_container_width=True)
+        st.dataframe(df.set_index("구분"), use_container_width=True, height = 500)
 
     with table_tab2:
-        st.dataframe(df_image.set_index("구분"), use_container_width=True)
+        st.dataframe(df_image.set_index("구분"), use_container_width=True, height = 500)
