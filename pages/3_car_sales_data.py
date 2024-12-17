@@ -48,7 +48,7 @@ st.image("car2.png")
 
 st.markdown(
     """
-    <div style="margin: 20px 0;">
+    <div style="margin: 50px 0;">
         <h4>🚗 차종별 연도별 판매 현황을 살펴보세요!</h4>
         <p>좌측 그래프에서 <strong>판매 대수의 변화</strong>를 확인하고,</p>
         <p>우측 그래프에서는 각 연도별 <strong>판매 비중</strong>을 비교해 보세요! 🎯</p>
