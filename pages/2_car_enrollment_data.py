@@ -71,14 +71,15 @@ st.image("car.png")
 
 st.markdown(
     """
-    
-    **🔍 차종을 선택해보세요!**  
-    궁금한 연도별 등록 대수를 살펴볼 수 있어요.  
-    오른쪽 차트에서는 **등록 비중**도 확인할 수 있답니다! 🎯  
-
-    
-    """
+    <div style="margin: 20px 0;">
+        <h4>🔍 차종을 선택해보세요!</h4>
+        <p>궁금한 연도별 등록 대수를 살펴볼 수 있어요.</p>
+        <p>오른쪽 차트에서는 <strong>등록 비중</strong>도 확인할 수 있답니다! 🎯</p>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
+
 
 # 사용자 입력: 차종 선택
 vehicle_types = enroll_num['구분'].unique()
