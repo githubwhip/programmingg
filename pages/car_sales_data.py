@@ -115,25 +115,63 @@ with col2:
     # 그래프 출력
     st.pyplot(fig2)
 
-# 학습지 섹션 추가
-st.header("학습지")
+import streamlit as st
+import pandas as pd
+from io import BytesIO
 
-# 학번과 이름을 입력 받는 부분
-answer_0 = st.text_input("1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
+# 페이지 헤더
+st.header("🚗 학습지 작성하기")
 
-# 질문 1
-st.image("alcohol.png")
-answer_1 = st.text_input("1. 휘발유의 판매대수는 2020년도에 비해 2021년도가 낮습니다. 그러나 2020년도에 비해 2021년도의 휘발유의 등록 비중은 늘어났습니다. \n그 이유를 추론해서 적어보세요.")
+# 학번과 이름 입력
+answer_0 = st.text_input("✏️ 1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
 
-# 질문 2
-st.image("lpg.png")
-answer_2 = st.text_input("2. LPG 차 연도별 판매 대수 현황을 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? \n(예: 100,000부터 시작하여 1만 단위 간격으로 표시 등)")
+# 질문 섹션 함수
+def add_question(icon, title, question, input_type="text", image=None):
+    """
+    Add a question with optional icon, image, and input type within an expander.
+    """
+    with st.expander(f"{icon} {title}"):
+        if image:
+            st.image(image, use_container_width=True)  # 최신 버전 대응
+        if input_type == "text":
+            return st.text_input(question)
+        elif input_type == "textarea":
+            return st.text_area(question)
+        elif input_type == "select":
+            return st.selectbox(question, ["선택하세요"] + ["100,000 단위", "50,000 단위", "1만 단위"])
+        return None
 
-# 질문 3
-answer_3 = st.text_input("3. 시간이 흐름에 따라 판매 대수와 판매 비중이 증가하는 차종은 어떤 것인가요? \n(예: 휘발유 등)")
+# 질문 1: 휘발유 판매대수
+answer_1 = add_question(
+    icon="⛽",
+    title="휘발유 판매 대수 및 비중 비교",
+    question="휘발유의 판매대수는 2020년도에 비해 2021년도가 낮습니다. 그러나 2020년도에 비해 2021년도의 휘발유의 등록 비중은 늘어났습니다. 그 이유를 추론해서 적어보세요.",
+    image="alcohol.png"
+)
 
-# 질문 4
-answer_4 = st.text_area("4. 여러분이 연도별 차종 판매 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.")
+# 질문 2: LPG 차 꺾은선 그래프
+answer_2 = add_question(
+    icon="📊",
+    title="LPG 차 꺾은선 그래프 눈금",
+    question="LPG 차 연도별 판매 대수 현황을 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? \n(예: 100,000부터 시작하여 1만 단위 간격으로 표시 등)",
+    image="lpg.png"
+)
+
+# 질문 3: 증가하는 차종
+answer_3 = add_question(
+    icon="📈",
+    title="판매 대수와 비중 증가 차종",
+    question="시간이 흐름에 따라 판매 대수와 판매 비중이 증가하는 차종은 어떤 것인가요? \n(예: 휘발유 등)",
+    input_type="text"
+)
+
+# 질문 4: 자유 서술
+answer_4 = add_question(
+    icon="📝",
+    title="판매 현황 조작 후 느낀 점",
+    question="여러분이 연도별 차종 판매 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.",
+    input_type="textarea"
+)
 
 # 답변을 모아 엑셀 파일로 저장 및 다운로드
 def download_answers(answers):
@@ -143,21 +181,25 @@ def download_answers(answers):
         df.to_excel(writer, index=False, sheet_name="Answers")
     return output.getvalue()
 
-import json
-
-if st.button("답변 파일 생성하기"):
-    data_to_save = {
-        "1. 학번": answer_0,
-        "2. 휘발유 판매대수": answer_1,
-        "3. LPG 차 판매 대수": answer_2,
-        "4. 판매 대수/비중 증가 차종": answer_3,
-        "5. 느낀 점": answer_4
-    }
-    
-    excel_data = download_answers(data_to_save)
-    st.balloons()
-    st.download_button(label="답변 엑셀 파일 다운로드",
-                       data=excel_data,
-                       file_name="answers.xlsx",
-                       mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-
+# 파일 생성 및 다운로드 버튼
+if st.button("📝 답변 파일 생성하기"):
+    if not answer_0:
+        st.warning("⚠️ 학번과 이름을 입력하세요!")
+    else:
+        data_to_save = {
+            "1. 학번": answer_0,
+            "2. 휘발유 판매대수 및 비중": answer_1,
+            "3. LPG 차 꺾은선 그래프": answer_2,
+            "4. 판매 대수/비중 증가 차종": answer_3,
+            "5. 느낀 점": answer_4
+        }
+        
+        excel_data = download_answers(data_to_save)
+        st.success("✅ 파일이 성공적으로 생성되었습니다!")
+        st.balloons()  # 폭죽 효과 출력
+        st.download_button(
+            label="📂 답변 엑셀 파일 다운로드",
+            data=excel_data,
+            file_name="answers.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
