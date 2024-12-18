@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import folium
 from streamlit_folium import st_folium
+import plotly.express as px
+
 # 로그인 상태 확인
 if not st.session_state.get("authenticated", False):
     st.warning("접속 확인이 필요합니다. [main 페이지로 돌아가서 선생님 성함과 비밀번호를 입력하고 다시 방문해 주세요.](./)")
@@ -14,24 +16,12 @@ data = {
     "전기차(대)": [59327, 77648, 26242, 19154, 28120, 22063, 24161, 5061, 12727, 15387, 
                 13249, 15140, 16611, 14673, 3034, 14012, 32976, 389855],
     "충전기(합계)": [34804, 50663, 9539, 9086, 11907, 11307, 11093, 3253, 6495, 8734, 
-                6777, 6558, 7825, 7521, 2138, 4137, 5872, 194081]
+                6777, 6558, 7825, 7521, 2138, 4137, 5872, 194081],
+    "급속": [2255, 3701, 867, 1781, 1359, 652, 999, 494, 1070, 1162, 510, 905, 1101, 593, 218, 1176, 1798, 20641],
+    "완속": [32437, 46962, 8672, 7827, 9738, 10655, 10094, 2759, 5425, 4572, 5167, 5653, 6724, 5128, 2382, 5261, 4074, 173440],
 }
 
 df = pd.DataFrame(data)
-
-# 이미지 데이터 준비 (새로운 표)
-data_image = {
-    "구분": ["서울", "경기", "인천", "경북", "경남", "부산", "대구", "울산",
-            "전북", "전남", "광주", "충북", "충남", "대전", "세종", "강원", "제주", "전국"],
-    "충전기(종합)": [34602, 50663, 9539, 9608, 11097, 11307, 11093, 3253, 
-                   6495, 5734, 5677, 6558, 7825, 5721, 2600, 6437, 5872, 194081],
-    "급속": [2255, 3701, 867, 1781, 1359, 652, 999, 494,
-            1070, 1162, 510, 905, 1101, 593, 218, 1176, 1798, 20641],
-    "완속": [32437, 46962, 8672, 7827, 9738, 10655, 10094, 2759,
-            5425, 4572, 5167, 5653, 6724, 5128, 2382, 5261, 4074, 173440]
-}
-
-df_image = pd.DataFrame(data_image)
 
 # 지역 좌표 설정
 coordinates = {
@@ -52,40 +42,16 @@ coordinates = {
     "세종": [36.4801, 127.2890],
     "강원": [37.8228, 128.1555],
     "제주": [33.4996, 126.5312],
-    "전국": [36.5, 127.5]
+    "전국": [36.5, 127.5],
 }
 
 # 지도 생성 함수
-def create_map1(column, color="blue"):
-    m = folium.Map(location=[36.5, 127.5], zoom_start=7)
-
-    for idx, row in df.iterrows():
-        region = row["구분"]
-        if region == "전국":  # 전국 데이터 제외
-            continue
-
-        count = row[column]
-        lat, lon = coordinates.get(region, (None, None))
-        if lat and lon:
-            folium.CircleMarker(
-                location=[lat, lon],
-                radius=count / 2500,
-                color=color,
-                fill=True,
-                fill_opacity=0.6,
-                popup=f"{region}: {count:,}대"
-            ).add_to(m)
-
-    return m
-
 def create_map(column, color="blue"):
     m = folium.Map(location=[36.5, 127.5], zoom_start=7)
-
     for idx, row in df.iterrows():
         region = row["구분"]
         if region == "전국":  # 전국 데이터 제외
             continue
-
         count = row[column]
         lat, lon = coordinates.get(region, (None, None))
         if lat and lon:
@@ -95,33 +61,9 @@ def create_map(column, color="blue"):
                 color=color,
                 fill=True,
                 fill_opacity=0.6,
-                popup=f"{region}: {count:,}대"
+                popup=f"{region}: {count:,}대",
             ).add_to(m)
-
     return m
-
-def create_map2(column, color="blue"):
-    m = folium.Map(location=[36.5, 127.5], zoom_start=7)
-
-    for idx, row in df.iterrows():
-        region = row["구분"]
-        if region == "전국":  # 전국 데이터 제외
-            continue
-
-        count = row[column]
-        lat, lon = coordinates.get(region, (None, None))
-        if lat and lon:
-            folium.CircleMarker(
-                location=[lat, lon],
-                radius=count / 2000,
-                color=color,
-                fill=True,
-                fill_opacity=0.6,
-                popup=f"{region}: {count:,}대"
-            ).add_to(m)
-
-    return m
-
 
 # Streamlit 레이아웃
 st.image("car3.png")
@@ -134,7 +76,7 @@ st.markdown(
         <p><strong>충전소 설치 현황</strong>도 함께 살펴보세요! 🛠️🔋</p>
     </div>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 # 페이지 나누기
@@ -143,24 +85,41 @@ left_col, right_col = st.columns([2, 1])
 # 왼쪽 부분 (탭 2개로 지도 표시)
 with left_col:
     tab1, tab2 = st.tabs(["전기차", "충전기"])
-
     with tab1:
-        ev_map = create_map1("전기차(대)", color="blue")
+        ev_map = create_map("전기차(대)", color="blue")
         st_folium(ev_map, width=700, height=500)
-
     with tab2:
-        charger_map = create_map2("충전기(합계)", color="green")
+        charger_map = create_map("충전기(합계)", color="green")
         st_folium(charger_map, width=700, height=500)
 
-# 오른쪽 부분 (탭 2개로 테이블 표시)
+# 오른쪽 부분 (인터랙티브 그래프)
 with right_col:
-    table_tab1, table_tab2 = st.tabs(["전기차/충전기", "급속/완속 충전기"])
+    tab1, tab2 = st.tabs(["전기차/충전기", "급속/완속 충전기"])
+    
+    with tab1:
+        # Plotly로 전기차/충전기 수 비교
+        fig = px.bar(
+            df,
+            x="구분",
+            y=["전기차(대)", "충전기(합계)"],
+            barmode="group",
+            title="전기차와 충전기 등록 현황",
+            labels={"value": "개수", "구분": "지역"},
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with tab2:
+        # Plotly로 급속/완속 비교
+        fig = px.bar(
+            df,
+            x="구분",
+            y=["급속", "완속"],
+            barmode="group",
+            title="급속/완속 충전기 비교",
+            labels={"value": "개수", "구분": "지역"},
+        )
+        st.plotly_chart(fig, use_container_width=True)
 
-    with table_tab1:
-        st.dataframe(df.set_index("구분"), use_container_width=True, height = 500)
-
-    with table_tab2:
-        st.dataframe(df_image.set_index("구분"), use_container_width=True, height = 500)
 
 import pandas as pd
 from io import BytesIO
