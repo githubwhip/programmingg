@@ -63,14 +63,19 @@ import streamlit as st
 # 두 개의 병렬 열 생성
 col1, col2 = st.columns(2)
 
-# 꺾은선 그래프 (등록 대수)
+import plotly.graph_objects as go
+import streamlit as st
+
+# "판매 대수"를 "만" 단위로 변환
+selected_num_data['판매 대수(만)'] = selected_num_data['판매 대수'] / 10000
+
 with col1:
     fig1 = go.Figure()
     fig1.add_trace(go.Scatter(
         x=selected_num_data['연도'],
-        y=selected_num_data['판매 대수'],
+        y=selected_num_data['판매 대수(만)'],
         mode='lines+markers+text',
-        text=[f"{int(x):,}" for x in selected_num_data['판매 대수']],
+        text=[f"{int(x):,}" for x in selected_num_data['판매 대수(만)']],
         textposition='top center',
         marker=dict(size=10, color='blue'),
         line=dict(width=3, color='blue')
@@ -78,12 +83,13 @@ with col1:
     fig1.update_layout(
         title=f"{selected_vehicle} 연도별 판매 대수",
         xaxis_title="연도",
-        yaxis_title="판매 대수",
+        yaxis_title="판매 대수 (만 단위)",
         font=dict(size=14),
         height=500,  # 그래프 높이 통일
         margin=dict(l=40, r=40, t=60, b=40),  # 마진 통일
     )
     st.plotly_chart(fig1, use_container_width=True)
+
 
 # 버블 차트 (판매 비중)
 with col2:
