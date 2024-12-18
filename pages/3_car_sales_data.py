@@ -75,20 +75,16 @@ with col1:
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
-    # 등록 비중 막대 그래프 (Plotly)
-    fig2 = px.bar(
+    # 등록 비중 원형 그래프 (Plotly)
+    fig2 = px.pie(
         selected_per_data,
-        x='판매 비중',
-        y='연도',
-        orientation='h',
-        text='판매 비중',
+        values='판매 비중',
+        names='연도',
         title=f"{selected_vehicle} 연도별 판매 비중",
         color_discrete_sequence=px.colors.qualitative.Pastel
     )
-    fig2.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+    fig2.update_traces(textinfo='percent+label', textfont_size=14)
     fig2.update_layout(
-        xaxis_title="판매 비중 (%)",
-        yaxis_title="연도",
         font=dict(size=14),
         margin=dict(l=20, r=20, t=60, b=20)
     )
