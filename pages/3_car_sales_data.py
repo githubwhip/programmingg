@@ -74,29 +74,31 @@ with col1:
     )
     st.plotly_chart(fig1, use_container_width=True)
 
+import plotly.express as px
+import streamlit as st
+
 with col2:
-    # 누적 막대 그래프
-    if not selected_per_data.empty and "판매 비중" in selected_per_data and "연도" in selected_per_data:
-        fig2 = px.bar(
-            selected_per_data,
-            x="연도",
-            y="판매 비중",
-            color="분류",  # "분류"가 데이터에 반드시 존재해야 함
-            text="판매 비중",
-            title=f"{selected_vehicle} 연도별 판매 비중",
-            barmode="stack",
-            color_discrete_sequence=px.colors.qualitative.Pastel
-        )
-        fig2.update_traces(texttemplate="%{text:.1f}%", textposition="outside")
-        fig2.update_layout(
-            xaxis_title="연도",
-            yaxis_title="판매 비중 (%)",
-            font=dict(size=14),
-            margin=dict(l=20, r=20, t=60, b=20)
-        )
-        st.plotly_chart(fig2, use_container_width=True)
-    else:
-        st.warning("데이터가 없거나 필요한 컬럼이 없습니다.")
+    # 연도별 판매 비중을 버블 차트로 표현
+    fig2 = px.scatter(
+        selected_per_data,
+        x='연도',  # x축: 연도
+        y='판매 비중',  # y축: 판매 비중
+        size='판매 비중',  # 버블 크기: 판매 비중에 따라 크기를 설정
+        color='연도',  # 색상: 연도별로 색상을 다르게 설정
+        title=f"{selected_vehicle} 연도별 판매 비중 버블 차트",
+        color_continuous_scale='Viridis',  # 색상 팔레트 설정
+        hover_name='연도',  # 마우스를 올렸을 때 표시할 항목
+        size_max=60,  # 버블의 최대 크기 설정
+        template='plotly',  # 기본 템플릿 설정 (스타일)
+    )
+    fig2.update_layout(
+        xaxis_title="연도",
+        yaxis_title="판매 비중 (%)",
+        font=dict(size=14),
+        margin=dict(l=20, r=20, t=60, b=20)
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
 
 
 
