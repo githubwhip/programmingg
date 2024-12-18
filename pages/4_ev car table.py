@@ -160,26 +160,30 @@ with right_col:
         st.dataframe(df_image.set_index("구분"), use_container_width=True, height=500)
 
 # Plotly 그래프 섹션 추가
+# Plotly 그래프 섹션 추가
 graph_button = st.button("그래프로 확인하기")
 if graph_button:
     graph_tab1, graph_tab2, graph_tab3, graph_tab4 = st.tabs(["전기차", "충전기 합계", "급속충전기", "완속충전기"])
 
     with graph_tab1:
-        ev_fig = create_plotly_graph(df, "전기차 등록 현황", "구분", "전기차(대)")
+        ev_data = df[df["구분"] != "전국"]  # '전국' 데이터 제외
+        ev_fig = create_plotly_graph(ev_data, "전기차 등록 현황", "구분", "전기차(대)")
         st.plotly_chart(ev_fig, use_container_width=True)
 
     with graph_tab2:
-        charger_fig = create_plotly_graph(df, "충전기 설치 현황", "구분", "충전기(합계)")
+        charger_data = df[df["구분"] != "전국"]  # '전국' 데이터 제외
+        charger_fig = create_plotly_graph(charger_data, "충전기 설치 현황", "구분", "충전기(합계)")
         st.plotly_chart(charger_fig, use_container_width=True)
 
     with graph_tab3:
-        rapid_fig = create_plotly_graph(df_image, "급속충전기 현황", "구분", "급속")
+        rapid_data = df_image[df_image["구분"] != "전국"]  # '전국' 데이터 제외
+        rapid_fig = create_plotly_graph(rapid_data, "급속충전기 현황", "구분", "급속")
         st.plotly_chart(rapid_fig, use_container_width=True)
 
     with graph_tab4:
-        slow_fig = create_plotly_graph(df_image, "완속충전기 현황", "구분", "완속")
+        slow_data = df_image[df_image["구분"] != "전국"]  # '전국' 데이터 제외
+        slow_fig = create_plotly_graph(slow_data, "완속충전기 현황", "구분", "완속")
         st.plotly_chart(slow_fig, use_container_width=True)
-
 
 
 import pandas as pd
