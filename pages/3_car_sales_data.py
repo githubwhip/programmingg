@@ -75,14 +75,15 @@ with col1:
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
-    # 등록 비중 원형 그래프 (Plotly)
-    fig2 = px.pie(
-        selected_per_data,
-        values='판매 비중',
-        names='연도',
-        title=f"{selected_vehicle} 연도별 판매 비중",
-        color_discrete_sequence=px.colors.qualitative.Pastel
-    )
+    fig2 = px.area(
+    selected_per_data,
+    x='연도',
+    y='판매 비중',
+    text='판매 비중',
+    title=f"{selected_vehicle} 연도별 판매 비중",
+    color_discrete_sequence=px.colors.qualitative.Pastel
+)
+
     fig2.update_traces(textinfo='percent+label', textfont_size=14)
     fig2.update_layout(
         font=dict(size=14),
