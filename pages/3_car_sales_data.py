@@ -84,13 +84,6 @@ with col2:
     color_discrete_sequence=px.colors.qualitative.Pastel
 )
 
-    fig2.update_traces(textinfo='percent+label', textfont_size=14)
-    fig2.update_layout(
-        font=dict(size=14),
-        margin=dict(l=20, r=20, t=60, b=20)
-    )
-    st.plotly_chart(fig2, use_container_width=True)
-
 import streamlit as st
 import pandas as pd
 from io import BytesIO
