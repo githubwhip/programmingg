@@ -61,7 +61,7 @@ def plot_num_trend_interactive(data, vehicle_type):
         x='연도',
         y='등록 대수',
         markers=True,
-        title=f"{vehicle_type} 연도별 등록 대수"
+        title=f"{vehicle_type} 자동차는 연도별로 얼마나 등록됐을까"
     )
     fig.update_traces(mode="lines+markers", marker=dict(size=8), line=dict(width=3))
     fig.update_layout(
@@ -82,7 +82,7 @@ def plot_bubble_chart(data, vehicle_type):
         y='등록 비중',
         size='등록 비중',
         color='연도',
-        title=f"{vehicle_type} 연도별 등록 비중 버블 차트",
+        title=f"{vehicle_type} 자동차는 연도별로 등록 비중이 어떻게 변화했을까",
         hover_name='연도',
         size_max=40,
         template='plotly_white',
