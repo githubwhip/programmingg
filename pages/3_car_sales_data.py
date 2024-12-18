@@ -83,9 +83,6 @@ import streamlit as st
 
 import plotly.express as px
 import streamlit as st
-
-# 버블 크기 조정: 판매 비중을 강조하되 너무 크지 않도록 조절
-selected_per_data['버블 크기'] = selected_per_data['판매 비중'] * 3  # 스케일링 조정
 import plotly.express as px
 import streamlit as st
 
@@ -109,6 +106,9 @@ with col2:
         font=dict(size=14),
         margin=dict(l=20, r=20, t=60, b=20)
     )
+    st.plotly_chart(fig2, use_container_width=True)
+
+
 import streamlit as st
 import pandas as pd
 from io import BytesIO
