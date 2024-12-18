@@ -30,13 +30,15 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 # 탭 구성
 tabs = ["⏰ 시간대별 충전 전력량", "📍 설치 장소별 이용 현황", "🍂 계절별 이용 현황"]
 tab1, tab2, tab3 = st.tabs(tabs)
 
 # 사용자 입력 변수 초기화
 answers = {}
+
+# 사용자 정보 입력 (학번 및 이름)
+answer_0 = st.text_input("학번과 이름을 입력하세요 (예: 12345 홍길동)")
 
 # 탭 1: 시간대별 충전 전력량
 with tab1:
