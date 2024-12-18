@@ -1,91 +1,159 @@
 import streamlit as st
 import pandas as pd
+import plotly.graph_objects as go
 import plotly.express as px
+import random
 from io import BytesIO
-import koreanize_matplotlib
-
-# Streamlit 앱 설정
-st.set_page_config(page_title="차종별 판매 현황", layout="wide")
-st.title("🚗 차종별 연도별 판매 현황 대시보드")
-
-# 로그인 확인
-if not st.session_state.get("authenticated", False):
-    st.warning("접속 확인이 필요합니다. [main 페이지로 돌아가서 성함과 비밀번호를 입력하고 다시 방문해 주세요.](./)")
-    st.stop()
+import time
 
 # 데이터 로드 및 전처리 함수
 @st.cache_data
-def load_and_preprocess_data(num_file, per_file):
-    # 판매 대수 데이터 로드
-    df_num = pd.read_csv(num_file, encoding="utf-8")
-    df_num = df_num[~df_num['구분'].isin(['합계', '기타', '소계'])].reset_index(drop=True)
-    df_num = df_num.melt(id_vars=["구분"], var_name="연도", value_name="판매 대수")
-    df_num['판매 대수'] = df_num['판매 대수'].str.replace(",", "").astype(int)
-    
-    # 판매 비중 데이터 로드
-    df_per = pd.read_csv(per_file, encoding="utf-8")
-    df_per = df_per[~df_per['구분'].isin(['합계', '기타', '소계'])].reset_index(drop=True)
-    df_per = df_per.melt(id_vars=["구분"], var_name="연도", value_name="판매 비중")
-    df_per['판매 비중'] = df_per['판매 비중'].str.replace("%", "").astype(float)
-    
-    return df_num, df_per
+def load_data(file_name):
+    df = pd.read_csv(file_name, encoding="utf-8")
+    df.columns = df.columns.str.strip()  # 열 이름 공백 제거
+    return df
 
-# 데이터 불러오기
-sales_num, sales_per = load_and_preprocess_data("salesnum.csv", "salesper.csv")
+def preprocess_data(df, value_name):
+    df = df[~df['구분'].isin(['합계', '기타'])].reset_index(drop=True)
+    df = df.iloc[:, 3:]  # '구분' 열부터 시작하도록 조정
+    df = df.melt(id_vars=["구분"], var_name="연도", value_name=value_name)
+    if "대수" in value_name:
+        df[value_name] = df[value_name].str.replace(",", "").astype(float)
+    elif "비중" in value_name:
+        df[value_name] = df[value_name].str.replace("%", "").astype(float)
+    return df
+
+# 데이터 로드 및 전처리
+enroll_num = preprocess_data(load_data("salesnum.csv"), "판매 대수")
+enroll_per = preprocess_data(load_data("salesper.csv"), "판매 비중")  # 등록 비중 데이터 추가
+
+# Streamlit 애플리케이션 시작
+st.image("car2.png")
+
+st.markdown(
+    """
+    <div style="margin: 50px 0;">
+        <h4>🚗 차종별 연도별 판매 현황을 살펴보세요!</h4>
+        <p>좌측 그래프에서 <strong>판매 대수의 변화</strong>를 확인하고,</p>
+        <p>우측 그래프에서는 각 연도별 <strong>판매 비중</strong>을 비교해 보세요! 🎯</p>
+        <p>판매 트렌드를 파악하면 어떤 차종이 인기인지 알 수 있을 거예요! 📊✨</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # 사용자 입력: 차종 선택
-vehicle_types = sales_num['구분'].unique().tolist()
-selected_vehicle = st.selectbox("🔍 차종을 선택하세요:", vehicle_types)
+vehicle_types = enroll_num['구분'].dropna().unique().tolist()
+vehicle_types = [x for x in vehicle_types if x != '소계']
+selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
 
-# 선택된 차종 데이터 필터링
-filtered_num = sales_num[sales_num['구분'] == selected_vehicle]
-filtered_per = sales_per[sales_per['구분'] == selected_vehicle]
+# 선택된 차종에 대한 데이터 필터링
+selected_num_data = enroll_num[enroll_num['구분'] == selected_vehicle]
+selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 
-# 2개의 열로 나눠 인터랙티브 그래프 표시
+# 두 개의 병렬 열 생성
 col1, col2 = st.columns(2)
 
-# 판매 대수 Plotly 꺾은선 그래프
 with col1:
-    st.subheader("📈 연도별 판매 대수 변화")
-    fig_num = px.line(
-        filtered_num, 
-        x="연도", 
-        y="판매 대수", 
+    # 등록 대수 꺾은선 그래프 (Plotly)
+    fig1 = go.Figure()
+    fig1.add_trace(go.Scatter(
+        x=selected_num_data['연도'],
+        y=selected_num_data['판매 대수'],
+        mode='lines+markers+text',
+        text=[f"{int(x):,}" for x in selected_num_data['판매 대수']],
+        textposition='top center',
+        marker=dict(size=10, color='blue'),
+        line=dict(width=3, color='blue')
+    ))
+    fig1.update_layout(
         title=f"{selected_vehicle} 연도별 판매 대수",
-        markers=True,
-        template="plotly_white"
+        xaxis_title="연도",
+        yaxis_title="판매 대수",
+        font=dict(size=14)
     )
-    fig_num.update_traces(line=dict(width=3), marker=dict(size=10, color="red"))
-    st.plotly_chart(fig_num, use_container_width=True)
+    st.plotly_chart(fig1, use_container_width=True)
 
-# 판매 비중 Plotly 막대그래프
 with col2:
-    st.subheader("📊 연도별 판매 비중 비교")
-    fig_per = px.bar(
-        filtered_per, 
-        x="판매 비중", 
-        y="연도", 
+    # 등록 비중 막대 그래프 (Plotly)
+    fig2 = px.bar(
+        selected_per_data,
+        x='판매 비중',
+        y='연도',
+        orientation='h',
+        text='판매 비중',
         title=f"{selected_vehicle} 연도별 판매 비중",
-        text="판매 비중",
-        orientation="h",
-        template="plotly_white",
-        color="판매 비중",
-        color_continuous_scale=px.colors.sequential.Viridis
+        color_discrete_sequence=px.colors.qualitative.Pastel
     )
-    fig_per.update_traces(texttemplate='%{text:.2f}%', textposition="outside")
-    st.plotly_chart(fig_per, use_container_width=True)
+    fig2.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+    fig2.update_layout(
+        xaxis_title="판매 비중 (%)",
+        yaxis_title="연도",
+        font=dict(size=14),
+        margin=dict(l=20, r=20, t=60, b=20)
+    )
+    st.plotly_chart(fig2, use_container_width=True)
 
-# 사용자 질문 및 답변 섹션
-st.subheader("📝 학습 질문")
-answer_0 = st.text_input("1️⃣ 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
+import streamlit as st
+import pandas as pd
+from io import BytesIO
 
-st.write("2️⃣ 질문에 대한 답변을 작성해 보세요.")
-answer_1 = st.text_area("휘발유 판매대수와 비중에 대한 분석을 작성해 주세요.")
-answer_2 = st.text_area("LPG 차 꺾은선 그래프 눈금을 어떻게 표기하면 좋을까요?")
-answer_3 = st.text_area("판매 대수와 비중이 증가하는 차종을 적어보세요.")
-answer_4 = st.text_area("데이터를 조작하며 느낀 점과 알게 된 점을 자유롭게 적어주세요.")
+# 페이지 헤더
 
-# 답변 파일 다운로드
+st.image("memo.png")
+
+# 학번과 이름 입력
+answer_0 = st.text_input("✏️ 1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
+
+# 질문 섹션 함수
+def add_question(icon, title, question, input_type="text", image=None):
+    """
+    Add a question with optional icon, image, and input type within an expander.
+    """
+    with st.expander(f"{icon} {title}"):
+        if image:
+            st.image(image, use_container_width=True)  # 최신 버전 대응
+        if input_type == "text":
+            return st.text_input(question)
+        elif input_type == "textarea":
+            return st.text_area(question)
+        elif input_type == "select":
+            return st.selectbox(question, ["선택하세요"] + ["100,000 단위", "50,000 단위", "1만 단위"])
+        return None
+
+# 질문 1: 휘발유 판매대수
+answer_1 = add_question(
+    icon="⛽",
+    title="휘발유 판매 대수 및 비중 비교",
+    question="휘발유의 판매대수는 2020년도에 비해 2021년도가 낮습니다. 그러나 2020년도에 비해 2021년도의 휘발유의 등록 비중은 늘어났습니다. 그 이유를 추론해서 적어보세요.",
+    image="alcohol.png"
+)
+
+# 질문 2: LPG 차 꺾은선 그래프
+answer_2 = add_question(
+    icon="📊",
+    title="LPG 차 꺾은선 그래프 눈금",
+    question="LPG 차 연도별 판매 대수 현황을 볼 때, 꺾은선 그래프의 눈금을 어떻게 표기하면 좋을까요? \n(예: 100,000부터 시작하여 1만 단위 간격으로 표시 등)",
+    image="lpg.png"
+)
+
+# 질문 3: 증가하는 차종
+answer_3 = add_question(
+    icon="📈",
+    title="판매 대수와 비중 증가 차종",
+    question="시간이 흐름에 따라 판매 대수와 판매 비중이 증가하는 차종은 어떤 것인가요? \n(예: 휘발유 등)",
+    input_type="text"
+)
+
+# 질문 4: 자유 서술
+answer_4 = add_question(
+    icon="📝",
+    title="판매 현황 조작 후 느낀 점",
+    question="여러분이 연도별 차종 판매 현황을 조작해보면서 느낀 점, 알게된 점, 궁금한 점 등을 자유롭게 서술해 주세요.",
+    input_type="textarea"
+)
+
+# 답변을 모아 엑셀 파일로 저장 및 다운로드
 def download_answers(answers):
     df = pd.DataFrame(list(answers.items()), columns=["질문", "답변"])
     output = BytesIO()
@@ -93,20 +161,28 @@ def download_answers(answers):
         df.to_excel(writer, index=False, sheet_name="Answers")
     return output.getvalue()
 
+# 파일 생성 및 다운로드 버튼
 if st.button("📝 답변 파일 생성하기"):
     if not answer_0:
         st.warning("⚠️ 학번과 이름을 입력하세요!")
     else:
-        answers = {
-            "학번과 이름": answer_0,
-            "휘발유 판매대수 분석": answer_1,
-            "LPG 그래프 눈금": answer_2,
-            "증가하는 차종": answer_3,
-            "느낀 점": answer_4
+        data_to_save = {
+            "1. 학번": answer_0,
+            "2. 휘발유 판매대수 및 비중": answer_1,
+            "3. LPG 차 꺾은선 그래프": answer_2,
+            "4. 판매 대수/비중 증가 차종": answer_3,
+            "5. 느낀 점": answer_4
         }
-        excel_data = download_answers(answers)
-        st.success("✅ 답변 파일이 생성되었습니다!")
-        st.download_button("📂 답변 파일 다운로드", excel_data, "answers.xlsx")
+        
+        excel_data = download_answers(data_to_save)
+        st.success("✅ 파일이 성공적으로 생성되었습니다!")
+        st.balloons()  # 폭죽 효과 출력
+        st.download_button(
+            label="📂 답변 엑셀 파일 다운로드",
+            data=excel_data,
+            file_name="answers.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
 
-if st.button("🔄 계속 학습하기"):
+if st.button("📊 계속 학습하러 가기"):
     st.switch_page("pages/ev car table.py")
