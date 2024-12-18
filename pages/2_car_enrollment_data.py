@@ -157,6 +157,7 @@ with st.container():
 
             excel_data = download_answers(data_to_save)
             st.success("✅ 파일이 성공적으로 생성되었습니다!")
+            st.balloons()
             st.download_button(
                 label="📂 답변 엑셀 파일 다운로드",
                 data=excel_data,
