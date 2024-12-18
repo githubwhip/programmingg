@@ -162,7 +162,7 @@ with right_col:
 # Plotly 그래프 섹션 추가
 graph_button = st.button("그래프로 확인하기")
 if graph_button:
-    graph_tab1, graph_tab2 = st.tabs(["전기차", "충전기"])
+    graph_tab1, graph_tab2, graph_tab3, graph_tab4 = st.tabs(["전기차", "충전기 합계", "급속충전기", "완속충전기"])
 
     with graph_tab1:
         ev_fig = create_plotly_graph(df, "전기차 등록 현황", "구분", "전기차(대)")
@@ -171,6 +171,15 @@ if graph_button:
     with graph_tab2:
         charger_fig = create_plotly_graph(df, "충전기 설치 현황", "구분", "충전기(합계)")
         st.plotly_chart(charger_fig, use_container_width=True)
+
+    with graph_tab3:
+        rapid_fig = create_plotly_graph(df_image, "급속충전기 현황", "구분", "급속")
+        st.plotly_chart(rapid_fig, use_container_width=True)
+
+    with graph_tab4:
+        slow_fig = create_plotly_graph(df_image, "완속충전기 현황", "구분", "완속")
+        st.plotly_chart(slow_fig, use_container_width=True)
+
 
 
 import pandas as pd
