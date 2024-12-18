@@ -3,6 +3,8 @@ import pandas as pd
 import plotly.express as px
 from io import BytesIO
 import random
+st.set_page_config(page_title="2_car_enrollment_data", layout="wide")  # 일반 모드 설정
+
 
 # 로그인 상태 확인
 if not st.session_state.get("authenticated", False):
