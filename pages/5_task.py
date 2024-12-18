@@ -37,9 +37,6 @@ tab1, tab2, tab3 = st.tabs(tabs)
 # 사용자 입력 변수 초기화
 answers = {}
 
-# 사용자 정보 입력 (학번 및 이름)
-answer_0 = st.text_input("학번과 이름을 입력하세요 (예: 12345 홍길동)")
-
 # 탭 1: 시간대별 충전 전력량
 with tab1:
     st.image("충전기당시간대별평균충전전력량.png", use_container_width=True)
@@ -82,18 +79,15 @@ with tab3:
 
 # 채점 기능
 if st.button("📋 제출하기"):
-    if not answer_0:
-        st.warning("⚠️ 학번과 이름을 입력하세요!")
-    else:
-        incorrect = []
-        for key, value in correct_answers.items():
-            if answers.get(key) != value:
-                incorrect.append(key)
+    incorrect = []
+    for key, value in correct_answers.items():
+        if answers.get(key) != value:
+            incorrect.append(key)
 
-        if not incorrect:  # 모두 맞았을 경우
-            st.success("🎉 축하합니다! 모든 문제를 맞혔습니다! 🎉")
-            st.balloons()
-        else:  # 틀린 문제가 있을 경우
-            st.warning("😢 아쉽게도 틀린 문제가 있어요. 다시 시도해보세요!")
-            for question in incorrect:
-                st.write(f"❗ **{question}** 다시 생각해보세요.")
+    if not incorrect:  # 모두 맞았을 경우
+        st.success("🎉 축하합니다! 모든 문제를 맞혔습니다! 🎉")
+        st.balloons()
+    else:  # 틀린 문제가 있을 경우
+        st.warning("😢 아쉽게도 틀린 문제가 있어요. 다시 시도해보세요!")
+        for question in incorrect:
+            st.write(f"❗ **{question}** 다시 생각해보세요.")
