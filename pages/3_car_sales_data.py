@@ -75,24 +75,28 @@ with col1:
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
-    fig2 = px.bar(
-        selected_per_data,
-        x='연도',
-        y='판매 비중',
-        color='분류',  # 데이터에 분류가 있어야 함
-        text='판매 비중',
-        title=f"{selected_vehicle} 연도별 판매 비중",
-        barmode='stack',
-        color_discrete_sequence=px.colors.qualitative.Pastel
-    )
-    fig2.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
-    fig2.update_layout(
-        xaxis_title="판매 비중 (%)",
-        yaxis_title="연도",
-        font=dict(size=14),
-        margin=dict(l=20, r=20, t=60, b=20)
-    )
-    st.plotly_chart(fig2, use_container_width=True)
+    # 누적 막대 그래프
+    if not selected_per_data.empty and "판매 비중" in selected_per_data and "연도" in selected_per_data:
+        fig2 = px.bar(
+            selected_per_data,
+            x="연도",
+            y="판매 비중",
+            color="분류",  # "분류"가 데이터에 반드시 존재해야 함
+            text="판매 비중",
+            title=f"{selected_vehicle} 연도별 판매 비중",
+            barmode="stack",
+            color_discrete_sequence=px.colors.qualitative.Pastel
+        )
+        fig2.update_traces(texttemplate="%{text:.1f}%", textposition="outside")
+        fig2.update_layout(
+            xaxis_title="연도",
+            yaxis_title="판매 비중 (%)",
+            font=dict(size=14),
+            margin=dict(l=20, r=20, t=60, b=20)
+        )
+        st.plotly_chart(fig2, use_container_width=True)
+    else:
+        st.warning("데이터가 없거나 필요한 컬럼이 없습니다.")
 
 
 
