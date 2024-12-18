@@ -66,16 +66,14 @@ col1, col2 = st.columns(2)
 import plotly.graph_objects as go
 import streamlit as st
 
-# "판매 대수"를 "만" 단위로 변환
-selected_num_data['판매 대수(만)'] = selected_num_data['판매 대수'] / 10000
-
+# 꺾은선 그래프 (등록 대수)
 with col1:
     fig1 = go.Figure()
     fig1.add_trace(go.Scatter(
         x=selected_num_data['연도'],
-        y=selected_num_data['판매 대수(만)'],
+        y=selected_num_data['판매 대수'],
         mode='lines+markers+text',
-        text=[f"{int(x):,}" for x in selected_num_data['판매 대수(만)']],
+        text=[f"{int(x):,}" for x in selected_num_data['판매 대수']],
         textposition='top center',
         marker=dict(size=10, color='blue'),
         line=dict(width=3, color='blue')
@@ -83,10 +81,12 @@ with col1:
     fig1.update_layout(
         title=f"{selected_vehicle} 연도별 판매 대수",
         xaxis_title="연도",
-        yaxis_title="판매 대수 (만 단위)",
-        font=dict(size=14),
+        yaxis_title="등록 대수",
+        template = "plotly_white",
+        hovermode = "x unified",
         height=500,  # 그래프 높이 통일
         margin=dict(l=40, r=40, t=60, b=40),  # 마진 통일
+        yaxis = dict(tickformat=",.0f"),
     )
     st.plotly_chart(fig1, use_container_width=True)
 
