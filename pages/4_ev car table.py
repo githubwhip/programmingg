@@ -3,6 +3,7 @@ import pandas as pd
 import folium
 from streamlit_folium import st_folium
 import plotly.express as px
+st.set_page_config(page_title="4_ev car table", layout="wide")  # 일반 모드 설정
 
 # 로그인 상태 확인
 if not st.session_state.get("authenticated", False):
