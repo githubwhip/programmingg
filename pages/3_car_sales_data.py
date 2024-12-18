@@ -6,6 +6,8 @@ import random
 from io import BytesIO
 import time
 
+st.set_page_config(page_title="3_car_sales_data", layout="wide")  # Wide 모드 설정
+
 # 데이터 로드 및 전처리 함수
 @st.cache_data
 def load_data(file_name):
