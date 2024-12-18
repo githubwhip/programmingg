@@ -134,9 +134,8 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 # 페이지 나누기
-left_col, right_col = st.columns([2, 1])
+left_col, right_col = st.columns([1, 1])  # 칼럼 비율을 1:1로 설정
 
 # 왼쪽 부분 (탭 2개로 지도 표시)
 with left_col:
@@ -159,6 +158,7 @@ with right_col:
 
     with table_tab2:
         st.dataframe(df_image.set_index("구분"), use_container_width=True, height=500)
+
 
 # Plotly 그래프 섹션 추가
 graph_tab1, graph_tab2, graph_tab3, graph_tab4 = st.tabs(["전기차", "충전기 합계", "급속충전기", "완속충전기"])
