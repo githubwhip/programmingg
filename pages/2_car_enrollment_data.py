@@ -52,29 +52,6 @@ selected_num_data = enroll_num[enroll_num['구분'] == selected_vehicle]
 selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 
 
-# Plotly로 버블 차트 생성
-def plot_bubble_chart(data, vehicle_type):
-    fig = px.scatter(
-        data,
-        x='연도',  # x축: 연도
-        y='등록 비중',  # y축: 등록 비중
-        size='등록 비중',  # 버블 크기: 등록 비중에 따라 설정
-        color='연도',  # 연도별 색상
-        title=f"{vehicle_type} 연도별 등록 비중 버블 차트",
-        hover_name='연도',  # 마우스를 올렸을 때 표시될 항목
-        size_max=40,  # 버블의 최대 크기 설정
-        template='plotly_white',
-        color_continuous_scale='Viridis'  # 색상 팔레트
-    )
-    fig.update_layout(
-        xaxis_title="연도",
-        yaxis_title="등록 비중 (%)",
-        font=dict(size=12),
-        margin=dict(l=20, r=20, t=60, b=20),
-        height=450  # 높이 통일
-    )
-    return fig
-
 # Plotly로 꺾은선 그래프 생성
 def plot_num_trend_interactive(data, vehicle_type):
     fig = px.line(
@@ -90,7 +67,30 @@ def plot_num_trend_interactive(data, vehicle_type):
         yaxis_title="등록 대수",
         template="plotly_white",
         hovermode="x unified",
-        height=450  # 높이 통일
+        height=500,  # 그래프 높이 통일
+        margin=dict(l=40, r=40, t=60, b=40)  # 여백 설정
+    )
+    return fig
+
+# Plotly로 버블 차트 생성
+def plot_bubble_chart(data, vehicle_type):
+    fig = px.scatter(
+        data,
+        x='연도',
+        y='등록 비중',
+        size='등록 비중',
+        color='연도',
+        title=f"{vehicle_type} 연도별 등록 비중 버블 차트",
+        hover_name='연도',
+        size_max=40,
+        template='plotly_white',
+        color_continuous_scale='Viridis'
+    )
+    fig.update_layout(
+        xaxis_title="연도",
+        yaxis_title="등록 비중 (%)",
+        height=500,  # 그래프 높이 통일
+        margin=dict(l=40, r=40, t=60, b=40)  # 여백 설정
     )
     return fig
 
@@ -102,6 +102,7 @@ with col1:
 
 with col2:
     st.plotly_chart(plot_bubble_chart(selected_per_data, selected_vehicle), use_container_width=True)
+
 
 # 추가 질문 및 답변 저장 (기존 코드 그대로 사용)
 st.image("memo.png")
