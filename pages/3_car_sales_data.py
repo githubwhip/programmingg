@@ -54,8 +54,15 @@ selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 # 두 개의 병렬 열 생성
 col1, col2 = st.columns(2)
 
+import plotly.graph_objects as go
+import plotly.express as px
+import streamlit as st
+
+# 두 개의 병렬 열 생성
+col1, col2 = st.columns(2)
+
+# 꺾은선 그래프 (등록 대수)
 with col1:
-    # 등록 대수 꺾은선 그래프 (Plotly)
     fig1 = go.Figure()
     fig1.add_trace(go.Scatter(
         x=selected_num_data['연도'],
@@ -70,24 +77,14 @@ with col1:
         title=f"{selected_vehicle} 연도별 판매 대수",
         xaxis_title="연도",
         yaxis_title="판매 대수",
-        font=dict(size=14)
+        font=dict(size=14),
+        height=500,  # 그래프 높이 통일
+        margin=dict(l=40, r=40, t=60, b=40),  # 마진 통일
     )
     st.plotly_chart(fig1, use_container_width=True)
 
-import plotly.express as px
-import streamlit as st
-import plotly.express as px
-import streamlit as st
-import plotly.express as px
-import streamlit as st
-
-import plotly.express as px
-import streamlit as st
-import plotly.express as px
-import streamlit as st
-
+# 버블 차트 (판매 비중)
 with col2:
-    # 연도별 판매 비중을 버블 차트로 표현
     fig2 = px.scatter(
         selected_per_data,
         x='연도',  # x축: 연도
@@ -97,16 +94,18 @@ with col2:
         title=f"{selected_vehicle} 연도별 판매 비중 버블 차트",
         color_continuous_scale='Viridis',  # 색상 팔레트 설정
         hover_name='연도',  # 마우스를 올렸을 때 표시할 항목
-        size_max=60,  # 버블의 최대 크기 설정
+        size_max=40,  # 버블의 최대 크기 설정 (조정 가능)
         template='plotly',  # 기본 템플릿 설정 (스타일)
     )
     fig2.update_layout(
         xaxis_title="연도",
         yaxis_title="판매 비중 (%)",
         font=dict(size=14),
-        margin=dict(l=20, r=20, t=60, b=20)
+        height=500,  # 그래프 높이 통일
+        margin=dict(l=40, r=40, t=60, b=40),  # 마진 통일
     )
     st.plotly_chart(fig2, use_container_width=True)
+
 
 
 import streamlit as st
