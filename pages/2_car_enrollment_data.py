@@ -51,17 +51,7 @@ selected_vehicle = st.selectbox("차종을 선택하세요:", vehicle_types)
 selected_num_data = enroll_num[enroll_num['구분'] == selected_vehicle]
 selected_per_data = enroll_per[enroll_per['구분'] == selected_vehicle]
 
-# Plotly로 인터랙티브 꺾은선 그래프 생성
-def plot_num_trend_interactive(data, vehicle_type):
-    fig = px.line(data, x='연도', y='등록 대수', markers=True, title=f"{vehicle_type} 연도별 등록 대수")
-    fig.update_traces(mode="lines+markers", marker=dict(size=8), line=dict(width=3))
-    fig.update_layout(
-        xaxis_title="연도",
-        yaxis_title="등록 대수",
-        template="plotly_white",
-        hovermode="x unified"
-    )
-    return fig
+
 # Plotly로 버블 차트 생성
 def plot_bubble_chart(data, vehicle_type):
     fig = px.scatter(
@@ -100,7 +90,7 @@ def plot_num_trend_interactive(data, vehicle_type):
         yaxis_title="등록 대수",
         template="plotly_white",
         hovermode="x unified",
-        height=500  # 높이 통일
+        height=550  # 높이 통일
     )
     return fig
 
