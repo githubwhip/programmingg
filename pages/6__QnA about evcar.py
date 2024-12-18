@@ -58,7 +58,13 @@ def main():
 
     if 'messages' not in st.session_state:
         st.session_state['messages'] = [{"role": "assistant", 
-                                        "content": "안녕하세요! 주어진 문서에 대해 궁금하신 것이 있으면 언제든 물어봐주세요!"}]
+                                        "content": "🚗✨ 안녕하세요! 전기차 정보 스테이션에 오신 것을 환영합니다! ✨🔋
+
+오른쪽 메뉴바에서 전기차 관련 정보 PDF 파일을 업로드해보세요! 📄
+그리고 API 키를 입력하면, 똑똑한 챗봇과 대화를 시작할 수 있어요. 🤖💬
+
+궁금한 점이 있거나 심화된 정보가 필요하다면, 챗봇이 척척 도와드릴 거예요! 🧐🚘
+"전기차의 모든 것, 궁금할 땐 여기를 톡톡!" 🚀"}]
 
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
