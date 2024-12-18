@@ -7,14 +7,14 @@ if not st.session_state.get("authenticated", False):
     st.warning("🔐 접속 확인이 필요합니다! [main 페이지로 돌아가서 선생님 성함과 비밀번호를 입력하고 다시 방문해 주세요.](./)")
     st.stop()
 
-# 정답 설정
+# 정답 설정 (키와 사용자 입력 키를 정확히 일치시킴)
 correct_answers = {
-    "급속 시간대": "오후 (12-18시)",
-    "완속 시간대": "저녁 (18-24시)",
-    "완속 설치 장소": "공공시설",
-    "급속 설치 장소": "주차시설",
-    "급속 계절": "가을",
-    "겨울 충전 이유": "배터리 성능 저하"
+    "급속 충전 시간대": "오후 (12-18시)",
+    "완속 충전 시간대": "저녁 (18-24시)",
+    "완속 충전기 설치 장소": "공공시설",
+    "급속 충전기 설치 장소": "주차시설",
+    "급속 충전기 사용 계절": "가을",
+    "겨울철 충전시간이 긴 이유": "배터리 성능 저하"
 }
 
 # 페이지 제목
@@ -79,11 +79,15 @@ with tab3:
 
 # 채점 기능
 if st.button("📋 제출하기"):
+    # 틀린 문제 확인
     incorrect = []
+    
+    # 정답 비교
     for key, value in correct_answers.items():
         if answers.get(key) != value:
             incorrect.append(key)
 
+    # 결과 출력
     if not incorrect:  # 모두 맞았을 경우
         st.success("🎉 축하합니다! 모든 문제를 맞혔습니다! 🎉")
         st.balloons()
