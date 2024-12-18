@@ -76,15 +76,24 @@ with col1:
 
 with col2:
     fig2 = px.bar(
-    selected_per_data,
-    x='연도',
-    y='판매 비중',
-    color='분류',  # 데이터에 분류가 있어야 함
-    text='판매 비중',
-    title=f"{selected_vehicle} 연도별 판매 비중",
-    barmode='stack',
-    color_discrete_sequence=px.colors.qualitative.Pastel
-)
+        selected_per_data,
+        x='연도',
+        y='판매 비중',
+        color='분류',  # 데이터에 분류가 있어야 함
+        text='판매 비중',
+        title=f"{selected_vehicle} 연도별 판매 비중",
+        barmode='stack',
+        color_discrete_sequence=px.colors.qualitative.Pastel
+    )
+    fig2.update_traces(texttemplate='%{text:.1f}%', textposition='outside')
+    fig2.update_layout(
+        xaxis_title="판매 비중 (%)",
+        yaxis_title="연도",
+        font=dict(size=14),
+        margin=dict(l=20, r=20, t=60, b=20)
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
 
 
 import streamlit as st
