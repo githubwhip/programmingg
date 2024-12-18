@@ -79,7 +79,7 @@ with col1:
         line=dict(width=3, color='blue')
     ))
     fig1.update_layout(
-        title=f"{selected_vehicle} 연도별 판매 대수",
+        title=f"{selected_vehicle} 자동차는 연도별로 얼마나 판매됐을까",
         xaxis_title="연도",
         yaxis_title="등록 대수",
         template = "plotly_white",
@@ -99,7 +99,7 @@ with col2:
         y='판매 비중',  # y축: 판매 비중
         size='판매 비중',  # 버블 크기: 판매 비중에 따라 크기를 설정
         color='연도',  # 색상: 연도별로 색상을 다르게 설정
-        title=f"{selected_vehicle} 연도별 판매 비중 버블 차트",
+        title=f"{selected_vehicle} 자동차는 연도별로 등록 비중이 어떻게 변화했을까",
         color_continuous_scale='Viridis',  # 색상 팔레트 설정
         hover_name='연도',  # 마우스를 올렸을 때 표시할 항목
         size_max=40,  # 버블의 최대 크기 설정 (조정 가능)
