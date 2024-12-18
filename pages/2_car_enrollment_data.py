@@ -90,7 +90,7 @@ def plot_num_trend_interactive(data, vehicle_type):
         yaxis_title="등록 대수",
         template="plotly_white",
         hovermode="x unified",
-        height=550  # 높이 통일
+        height=450  # 높이 통일
     )
     return fig
 
