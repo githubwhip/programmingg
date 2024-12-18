@@ -81,8 +81,11 @@ import streamlit as st
 import plotly.express as px
 import streamlit as st
 
-# 버블 크기 조정: 판매 비중을 강조하기 위해 10을 곱함 (필요에 따라 조정)
-selected_per_data['버블 크기'] = selected_per_data['판매 비중'] * 3
+import plotly.express as px
+import streamlit as st
+
+# 버블 크기 조정: 판매 비중을 강조하되 너무 크지 않도록 조절
+selected_per_data['버블 크기'] = selected_per_data['판매 비중'] * 3  # 스케일링 조정
 
 with col2:
     # 연도별 판매 비중을 버블 차트로 표현
@@ -95,7 +98,7 @@ with col2:
         title=f"{selected_vehicle} 연도별 판매 비중 버블 차트",
         color_continuous_scale='Viridis',  # 색상 팔레트 설정
         hover_name='연도',  # 마우스를 올렸을 때 표시할 항목
-        size_max=100,  # 버블의 최대 크기 설정 (기본 60에서 더 크게)
+        size_max=40,  # 버블의 최대 크기 제한 (기본값보다 줄임)
         template='plotly',  # 기본 템플릿 설정 (스타일)
     )
 
