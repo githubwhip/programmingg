@@ -75,14 +75,17 @@ with col1:
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
-    fig2 = px.area(
+    fig2 = px.bar(
     selected_per_data,
     x='연도',
     y='판매 비중',
+    color='분류',  # 데이터에 분류가 있어야 함
     text='판매 비중',
     title=f"{selected_vehicle} 연도별 판매 비중",
+    barmode='stack',
     color_discrete_sequence=px.colors.qualitative.Pastel
 )
+
 
 import streamlit as st
 import pandas as pd
