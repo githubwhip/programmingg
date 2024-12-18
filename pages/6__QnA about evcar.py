@@ -29,7 +29,7 @@ def main():
     page_title="DirChat",
     page_icon=":books:")
 
-    st.title("_무엇이든 물어보살 :red[전기차]_ :books:")
+    st.image("qna.png")
 
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
