@@ -82,7 +82,7 @@ import plotly.express as px
 import streamlit as st
 
 # 버블 크기 조정: 판매 비중을 강조하기 위해 10을 곱함 (필요에 따라 조정)
-selected_per_data['버블 크기'] = selected_per_data['판매 비중'] * 10
+selected_per_data['버블 크기'] = selected_per_data['판매 비중'] * 3
 
 with col2:
     # 연도별 판매 비중을 버블 차트로 표현
