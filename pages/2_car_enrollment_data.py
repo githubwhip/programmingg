@@ -71,7 +71,7 @@ def plot_bubble_chart(data, vehicle_type):
         yaxis_title="등록 비중 (%)",
         font=dict(size=12),
         margin=dict(l=20, r=20, t=60, b=20),
-        height=500  # 높이 통일
+        height=400  # 높이 통일
     )
     return fig
 
