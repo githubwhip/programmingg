@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import time
+st.set_page_config(page_title="main", layout="wide")  # 일반 모드 설정
 
 FONT_PATH = "fonts/malgun.ttf"
 FONT_CSS = f"""
