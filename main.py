@@ -17,7 +17,7 @@ FONT_CSS = f"""
 """
 st.markdown(FONT_CSS, unsafe_allow_html=True)
 # 이미지 출력
-st.image('image.png')
+st.image('poster.png')
 
 # 데이터 불러오기
 data = pd.read_csv("members.csv")
