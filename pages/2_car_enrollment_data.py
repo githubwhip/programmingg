@@ -62,26 +62,37 @@ def plot_num_trend_interactive(data, vehicle_type):
         hovermode="x unified"
     )
     return fig
-
-# Plotly로 인터랙티브 막대 그래프 생성
-def plot_percentage_trend_interactive(data, vehicle_type):
-    colors = [f"#{random.randint(0, 0xFFFFFF):06x}" for _ in range(len(data))]
-    fig = px.bar(data, x='등록 비중', y='연도', orientation='h',
-                 title=f"{vehicle_type} 연도별 등록 비중",
-                 text='등록 비중', color='연도', color_discrete_sequence=colors)
+# Plotly로 버블 차트 생성
+def plot_bubble_chart(data, vehicle_type):
+    fig = px.scatter(
+        data,
+        x='연도',  # x축: 연도
+        y='등록 비중',  # y축: 등록 비중
+        size='등록 비중',  # 버블 크기: 등록 비중에 따라 설정
+        color='연도',  # 연도별 색상
+        title=f"{vehicle_type} 연도별 등록 비중 버블 차트",
+        hover_name='연도',  # 마우스를 올렸을 때 표시될 항목
+        size_max=40,  # 버블의 최대 크기 설정
+        template='plotly_white',
+        color_continuous_scale='Viridis'  # 색상 팔레트
+    )
     fig.update_layout(
-        xaxis_title="등록 비중 (%)",
-        yaxis_title="연도",
-        template="plotly_white"
+        xaxis_title="연도",
+        yaxis_title="등록 비중 (%)",
+        font=dict(size=12),
+        margin=dict(l=20, r=20, t=60, b=20),
     )
     return fig
 
 # 두 개의 병렬 열 생성
 col1, col2 = st.columns(2)
+
 with col1:
     st.plotly_chart(plot_num_trend_interactive(selected_num_data, selected_vehicle), use_container_width=True)
+
 with col2:
-    st.plotly_chart(plot_percentage_trend_interactive(selected_per_data, selected_vehicle), use_container_width=True)
+    st.plotly_chart(plot_bubble_chart(selected_per_data, selected_vehicle), use_container_width=True)
+
 
 # 추가 질문 및 답변 저장 (기존 코드 그대로 사용)
 st.image("memo.png")
