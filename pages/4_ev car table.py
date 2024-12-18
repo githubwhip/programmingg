@@ -160,6 +160,20 @@ with right_col:
         st.dataframe(df_image.set_index("구분"), use_container_width=True, height=500)
 
 
+import plotly.express as px
+
+def create_plotly_graph(data, title, x_column, y_column):
+    fig = px.bar(data, x=x_column, y=y_column, title=title)
+    
+    # 숫자 포맷을 더 직관적으로 변경 (천 단위 쉼표 추가)
+    fig.update_layout(
+        yaxis_tickformat=',',  # 천 단위 쉼표 추가
+        xaxis_tickangle=-45,  # X축 레이블이 겹치지 않도록 기울이기
+        title_x=0.5,  # 제목 중앙 정렬
+    )
+    
+    return fig
+
 # Plotly 그래프 섹션 추가
 graph_tab1, graph_tab2, graph_tab3, graph_tab4 = st.tabs(["전기차", "충전기 합계", "급속충전기", "완속충전기"])
 
@@ -182,6 +196,7 @@ with graph_tab4:
     slow_data = df_image[df_image["구분"] != "전국"]  # '전국' 데이터 제외
     slow_fig = create_plotly_graph(slow_data, "완속충전기 현황", "구분", "완속")
     st.plotly_chart(slow_fig, use_container_width=True)
+
 
 import pandas as pd
 from io import BytesIO
