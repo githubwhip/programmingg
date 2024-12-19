@@ -111,7 +111,16 @@ with col1:
 with col2:
     st.plotly_chart(plot_bubble_chart(selected_per_data, selected_vehicle), use_container_width=True)
 
+# 세 개의 열 생성 (버튼을 오른쪽에 배치)
+col1, col2, col3 = st.columns([1, 1, 1])  # 비율 조정 가능
 
+# 오른쪽 열에 버튼 추가
+with col3:
+    button = st.button("글로벌 전기차 침투율 살펴보기")
+
+# 버튼이 눌리면 이미지를 표시
+if button:
+    st.image("needle.png", caption="글로벌 전기차 침투율", use_column_width=True)
 # 추가 질문 및 답변 저장 (기존 코드 그대로 사용)
 st.image("memo.png")
 with st.container():
