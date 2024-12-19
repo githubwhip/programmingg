@@ -143,7 +143,7 @@ if selected_vehicle == "전기":
 
 st.image("memo.png")
 with st.container():
-    answer_1 = st.text_input("✏️ 1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
+    answer_1 = st.text_input("✏️ 1. 학번과 이름을 적어주세요. (예: 2024-12345 홍길동)")
     
     def add_question(icon, title, question, input_type="text", image=None):
         with st.expander(f"{icon} {title}"):
