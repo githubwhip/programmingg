@@ -292,4 +292,4 @@ if st.button("📝 답변 파일 생성하기"):
 
 # 페이지 이동 버튼
 if st.button("📊 계속 학습하러 가기"):
-    st.switch_page("pages/task.py")
+    st.switch_page("pages/5_task.py")
