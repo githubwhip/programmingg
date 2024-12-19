@@ -123,7 +123,7 @@ if selected_vehicle == "전기":
 
 # 버튼이 눌리면 이미지를 표시
     if button:
-        st.image("needle.png", caption="글로벌 전기차 침투율", use_column_width=True)
+        st.image("needle.png", caption="글로벌 전기차 침투율", use_container_width=True)
 
 st.image("memo.png")
 with st.container():
