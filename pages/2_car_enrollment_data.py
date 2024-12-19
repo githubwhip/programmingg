@@ -166,4 +166,4 @@ with st.container():
             )
 
 if st.button("📊 계속 학습하러 가기"):
-    st.switch_page("pages/car_sales_data.py")
+    st.switch_page("pages/3_car_sales_data.py")
