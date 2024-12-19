@@ -112,17 +112,31 @@ with col2:
     st.plotly_chart(plot_bubble_chart(selected_per_data, selected_vehicle), use_container_width=True)
 
 
+with col1:
+    st.plotly_chart(plot_num_trend_interactive(selected_num_data, selected_vehicle), use_container_width=True)
+
+with col2:
+    st.plotly_chart(plot_bubble_chart(selected_per_data, selected_vehicle), use_container_width=True)
+
 # "전기"를 선택했을 경우 버튼 추가
 if selected_vehicle == "전기":
     # 세 개의 열 생성 (버튼을 오른쪽에 배치)
     col1, col2, col3 = st.columns([1, 1, 1])  # 비율 조정 가능
 
-# 오른쪽 열에 버튼 추가
+    # 버튼 상태를 세션 상태로 관리
+    if "show_image" not in st.session_state:
+        st.session_state.show_image = False  # 초기 상태는 False
+
+    # 오른쪽 열에 버튼 추가
     with col3:
         button = st.button("글로벌 전기차 침투율 살펴보기")
 
-# 버튼이 눌리면 이미지를 표시
+    # 버튼 클릭 시 상태를 토글
     if button:
+        st.session_state.show_image = not st.session_state.show_image
+
+    # 상태에 따라 이미지 표시 또는 숨기기
+    if st.session_state.show_image:
         st.image("needle.png", caption="글로벌 전기차 침투율", use_container_width=True)
 
 st.image("memo.png")
