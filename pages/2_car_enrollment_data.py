@@ -121,16 +121,16 @@ with col2:
 
 # "전기"를 선택했을 경우 버튼 추가
 if selected_vehicle == "전기":
+    # 세션 상태 초기화
+    if "show_image" not in st.session_state:
+        st.session_state.show_image = False  # 초기 상태는 숨김(False)
+
     # 세 개의 열 생성 (버튼을 오른쪽에 배치)
     col1, col2, col3 = st.columns([1, 1, 1])  # 비율 조정 가능
 
-    # 버튼 상태를 세션 상태로 관리
-    if "show_image" not in st.session_state:
-        st.session_state.show_image = False  # 초기 상태는 False
-
     # 오른쪽 열에 버튼 추가
     with col3:
-        button = st.button("글로벌 전기차 침투율 살펴보기", key="electric_vehicle_button")
+        button = st.button("글로벌 전기차 침투율 살펴보기")
 
     # 버튼 클릭 시 상태를 토글
     if button:
