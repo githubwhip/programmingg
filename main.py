@@ -29,8 +29,8 @@ if "authenticated" not in st.session_state:
 
 # 로그인 폼
 with st.form("login_form"):
-    ID = st.text_input("ID", placeholder="선생님 성함을 입력하세요")
-    PW = st.text_input("Password", type="password", placeholder="비밀번호를 입력하세요")
+    ID = st.text_input("ID", placeholder="선생님 성함을 입력하세요(ID는 홍길동입니다).")
+    PW = st.text_input("Password", type="password", placeholder="비밀번호를 입력하세요(비밀번호는 1234입니다).")
     submit_button = st.form_submit_button("학생 접속")
 
 # 로그인 검증
