@@ -114,13 +114,17 @@ with col2:
 
 # "전기"를 선택했을 경우 버튼 추가
 if selected_vehicle == "전기":
-    st.markdown("---")  # 구분선 추가
-    st.write("전기 자동차 등록 비중 분석")
-    button = st.button("자세히 보기")
-    
+    # 세 개의 열 생성 (버튼을 오른쪽에 배치)
+    col1, col2, col3 = st.columns([1, 1, 1])  # 비율 조정 가능
+
+# 오른쪽 열에 버튼 추가
+    with col3:
+        button = st.button("글로벌 전기차 침투율 살펴보기")
+
+# 버튼이 눌리면 이미지를 표시
     if button:
         st.image("needle.png", caption="글로벌 전기차 침투율", use_column_width=True)
-        
+
 st.image("memo.png")
 with st.container():
     answer_1 = st.text_input("✏️ 1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
