@@ -125,7 +125,7 @@ from io import BytesIO
 st.image("memo.png")
 
 # 학번과 이름 입력
-answer_0 = st.text_input("✏️ 1. 학번과 이름을 적어주세요. (예: 2024-25986 정유미)")
+answer_0 = st.text_input("✏️ 1. 학번과 이름을 적어주세요. (예: 2024-12345 홍길동)")
 
 # 질문 섹션 함수
 def add_question(icon, title, question, input_type="text", image=None):
