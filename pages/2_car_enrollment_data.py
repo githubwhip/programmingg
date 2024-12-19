@@ -138,7 +138,7 @@ if selected_vehicle == "전기":
 
     # 상태에 따라 이미지 표시 또는 숨기기
     if st.session_state.show_image:
-        st.image("needle.png", caption="글로벌 전기차 침투율", use_container_width=True, key="electric_vehicle_image")
+        st.image("needle.png", caption="글로벌 전기차 침투율", use_container_width=True)
 
 
 st.image("memo.png")
